@@ -12,11 +12,12 @@
 
     <style>
         :root {
-            --orange: #ff8a00;
-            --amber: #ffc400;
+            --orange: #EC6426;
+            --amber: #F8A91F;
+            --light: #FDE3CF;
             --dark: #1c1a1a;
-            --glass: rgba(255, 255, 255, 0.14);
-            --glass-border: rgba(255, 255, 255, 0.28);
+            --glass: rgba(0, 0, 0, 0.1);
+            --glass-border: rgba(0, 0, 0, 0.2);
             --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.25);
             --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.12);
             --radius-lg: 22px;
@@ -30,10 +31,8 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #fdfbf7;
-            background: radial-gradient(130% 80% at 20% 20%, rgba(255, 255, 255, 0.12), transparent),
-                        radial-gradient(100% 70% at 80% 0%, rgba(255, 231, 188, 0.22), transparent),
-                        linear-gradient(135deg, #ff7b00 0%, #ffc444 55%, #ffae00 100%);
+            color: var(--dark);
+            background: var(--orange);
             position: relative;
             overflow-x: hidden;
             padding: 28px 18px 56px;
@@ -72,7 +71,7 @@
             font-size: clamp(1.4rem, 2vw, 1.8rem);
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: #fffaf4;
+            color: var(--dark);
         }
 
         .menu-btn {
@@ -81,7 +80,7 @@
             height: 46px;
             border-radius: 14px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.12);
+            background: var(--glass);
             backdrop-filter: blur(8px);
             box-shadow: var(--shadow-soft);
             display: inline-flex;
@@ -97,7 +96,7 @@
             display: block;
             width: 18px;
             height: 2px;
-            background: #fffdf8;
+            background: var(--dark);
             border-radius: 12px;
             position: relative;
             transition: transform 0.22s ease, width 0.22s ease;
@@ -128,7 +127,7 @@
         }
 
         .hero-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+            background: var(--amber);
             border: 1px solid var(--glass-border);
             border-radius: 28px;
             padding: clamp(22px, 3vw, 32px);
@@ -142,8 +141,8 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.24), transparent 55%),
-                        radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.18), transparent 45%);
+            background: radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.05), transparent 55%),
+                        radial-gradient(circle at 80% 0%, rgba(0, 0, 0, 0.03), transparent 45%);
             pointer-events: none;
         }
 
@@ -153,8 +152,8 @@
             gap: 8px;
             padding: 8px 14px;
             border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
             font-size: 0.88rem;
             letter-spacing: 0.01em;
         }
@@ -163,12 +162,12 @@
             font-size: clamp(2rem, 4vw, 2.8rem);
             line-height: 1.1;
             margin: 14px 0 10px;
-            color: #fffaf4;
+            color: var(--dark);
         }
 
         .subhead {
             font-size: 1.02rem;
-            color: #fbeedd;
+            color: var(--dark);
             max-width: 34ch;
             margin-bottom: 18px;
         }
@@ -192,8 +191,8 @@
             padding: 14px 18px;
             border-radius: var(--radius-lg);
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.12);
-            color: #fffdf8;
+            background: var(--glass);
+            color: var(--dark);
             font-weight: 700;
             font-size: 1rem;
             text-decoration: none;
@@ -213,8 +212,8 @@
         }
 
         .glass-btn.primary {
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 230, 200, 0.24));
-            color: #1c1a1a;
+            background: linear-gradient(120deg, var(--orange), var(--amber));
+            color: white;
         }
 
         .glass-btn.primary:hover {
@@ -232,7 +231,7 @@
             width: clamp(140px, 22vw, 190px);
             aspect-ratio: 1;
             border-radius: 32px;
-            background: conic-gradient(from 140deg, #ff8a00, #ffc444, #ff9a1a, #ff8a00);
+            background: conic-gradient(from 140deg, var(--orange), var(--amber), var(--orange), var(--orange));
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
             display: grid;
             place-items: center;
@@ -254,7 +253,7 @@
             font-weight: 800;
             font-size: clamp(2rem, 4vw, 2.6rem);
             letter-spacing: 0.08em;
-            color: #fffaf4;
+            color: var(--dark);
             text-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
         }
 
@@ -263,15 +262,15 @@
             gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
-            color: #fff4e3;
+            color: var(--dark);
             font-weight: 600;
         }
 
         .chip {
             padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.14);
+            background: var(--glass);
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid var(--glass-border);
         }
 
         .features {
@@ -282,13 +281,13 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             border-radius: 18px;
             padding: 16px 18px;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-soft);
-            color: #fff9f2;
+            color: var(--dark);
             display: flex;
             gap: 12px;
             align-items: flex-start;
@@ -305,9 +304,9 @@
             width: 44px;
             height: 44px;
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.18);
+            background: var(--glass);
             display: grid;
-            place-items: center;
+            place-items: center;     
             font-size: 1.35rem;
         }
 
@@ -318,7 +317,7 @@
         }
 
         .feature-copy {
-            color: #f7ebda;
+            color: var(--dark);
             font-size: 0.94rem;
             line-height: 1.5;
         }
@@ -326,7 +325,7 @@
         .footer {
             margin-top: 40px;
             text-align: center;
-            color: #fff3e1;
+            color: var(--dark);
             font-size: 0.95rem;
             opacity: 0.9;
         }
