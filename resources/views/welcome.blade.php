@@ -383,25 +383,11 @@
                 <p class="subhead">
                     Discover top local restaurants, track riders live, and get meals in under 30 minutes with FastBites—built for the way you actually eat.
                 </p>
-                <div class="cta-stack ">
-                    @if (Route::has('login'))
-                        @auth
-                            <a class="glass-btn primary" href="{{ url('/dashboard') }}">Go to Dashboard</a>
-                            <a class="glass-btn primary" href="{{ url('/login') }}">Log In</a>
-                            <a class="glass-btn primary" href="{{ url('/Sign In') }}">Sign In</a>
-
-
-                        @else
-                            <a class="glass-btn primary" href="{{ route('login') }}">Log In</a>
-                            @if (Route::has('register'))
-                                <a class="glass-btn" href="{{ route('register') }}">Sign Up</a>
-                            @endif
-                        @endauth
-                    @else
-                        <a class="glass-btn primary" href="#">Log In</a>
-                        <a class="glass-btn" href="#">Sign Up</a>
-                    @endif
-                </div>
+                <div class="cta-stack">
+    <a class="glass-btn primary" href="{{ route('login') }}">Login</a>
+    <a class="glass-btn primary" href="{{ route('register') }}">Sign Up</a>
+    <a class="glass-btn primary" href="{{ url('/dashboard') }}">Go to Dashboard</a>
+</div>
 
                 <div class="features">
                     <div class="feature-card">
