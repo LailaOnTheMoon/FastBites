@@ -385,8 +385,7 @@
                 <div class="cta-stack">
     <a class="glass-btn primary" href="{{ route('login') }}">Login</a>
     <a class="glass-btn primary" href="{{ route('register') }}">Sign Up</a>
-    <a class="glass-btn primary" href="{{ url('/dashboard') }}">Go to Dashboard</a>
-</div>
+<a class="glass-btn primary" href="{{ route('admin.dashboard') }}">Go to Dashboard</a></div>
 
                 <div class="features">
                     <div class="feature-card">
