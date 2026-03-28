@@ -35,7 +35,7 @@
             </div>
 
             <div class="hero-card">
-                <div class="eyebrow">Your city, your cravings · delivered</div>
+                <div class="eyebrow"><a href="{{ route('test') }}">Your city, your cravings · delivered</a></div>
                 <h1>Fast food that moves at your speed.</h1>
                 <p class="subhead">
                     Discover top local restaurants, track riders live, and get meals in under 30 minutes with FastBites—built for the way you actually eat.
