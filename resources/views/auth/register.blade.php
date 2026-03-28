@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-auth-layout>
     <div class="mb-6">
         <h1>{{ __('Create your FastBites account') }}</h1>
         <p class="mt-2 text-sm text-gray-700">{{ __('Sign up once and enjoy every order with a glossy checkout experience.') }}</p>
@@ -54,4 +54,4 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-auth-layout>
