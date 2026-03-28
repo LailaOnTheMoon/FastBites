@@ -1,0 +1,80 @@
+body.kitchen-page {
+  --orange: #EC6426;   /* برتقالي */
+  --amber: #F8A91F;    /* أصفر */
+  --dark: #1c1a1a;
+  background: linear-gradient(135deg, var(--orange), var(--amber));
+  font-family: 'Poppins', 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: min(520px, 100%);
+  padding: 32px 28px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+  backdrop-filter: blur(18px);
+}
+
+.auth-card h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--dark);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--dark);
+}
+
+.input {
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  font-size: 15px;
+  color: var(--dark);
+}
+
+.status-box {
+  margin: 14px 0;
+  padding: 14px;
+  border-radius: 16px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+.status-box.preparing {
+  background: var(--orange);
+  color: white;
+}
+
+.timer-box {
+  margin: 14px 0;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--amber);
+  color: var(--dark);
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.status-box.prepared {
+  background: var(--amber);
+  color: var(--dark);
+}
