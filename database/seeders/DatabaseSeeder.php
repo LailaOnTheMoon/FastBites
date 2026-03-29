@@ -19,8 +19,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Laila Smith',
-            'email' => 'test@fastbites.ps',
+            'first_name' => 'Laila',
+            'middle_name' => 'Smith',
+            'last_name' => 'Johnson',
+            'email' => 'laila@fastbites.ps',
+            'account_type' => 'admin',
+            'phone_number' => '972598111111',
+            'address' => 'Tulkarm',
             'password' => Hash::make('123'),
         ]);
     }

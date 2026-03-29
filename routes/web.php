@@ -12,6 +12,8 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [TestController::class, 'viewTest'])->name('test');
+Route::get('/updateUserTest', [TestController::class, 'updateUser'])->name('updateUserTest');
+Route::get('/createUserTest', [TestController::class, 'createUser'])->name('createUserTest');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -37,6 +39,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+    });
+
+    Route::prefix('super-admin')->name('super-admin.')->group(function () {
+        Route::view('/dashboard', 'super-admin.dashboard')->name('dashboard');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'FastBites Admin Dashboard')
+@section('title', 'FastBites '.ucwords(str_replace(['_','-'], ' ', Auth::user()->account_type ?? 'Admin')).' Dashboard')
 
 @section('content')
     @php

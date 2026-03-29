@@ -18,9 +18,39 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="first_name" :value="__('First Name')" />
+            <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', $user->first_name)" required autofocus autocomplete="given-name" />
+            <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="middle_name" :value="__('Middle Name')" />
+            <x-text-input id="middle_name" name="middle_name" type="text" class="mt-1 block w-full" :value="old('middle_name', $user->middle_name)" autocomplete="additional-name" />
+            <x-input-error class="mt-2" :messages="$errors->get('middle_name')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="last_name" :value="__('Last Name')" />
+            <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" :value="old('last_name', $user->last_name)" required autocomplete="family-name" />
+            <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="phone_number" :value="__('Phone Number')" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="address" :value="__('Address')" />
+            <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $user->address)" required autocomplete="street-address" />
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="account_type" :value="__('Account Type')" />
+            <x-text-input id="account_type" name="account_type" type="text" class="mt-1 block w-full" :value="old('account_type', $user->account_type)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('account_type')" />
         </div>
 
         <div>

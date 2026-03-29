@@ -20,21 +20,29 @@
             <div>
                 <div class="brand-block">
                     <div class="sidebar-brand-row">
-                        <a href="{{ url('/admin/dashboard') }}" class="brand-name">FastBites</a>
+                        <a href="{{ auth()->check() ? route(auth()->user()->getDashboardRoute()) : url('/') }}" class="brand-name">FastBites</a>
                         <button class="drawer-close-button" type="button" aria-label="Close menu">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.41L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3l6.3 6.29 6.29-6.3z" /></svg>
                         </button>
                     </div>
-                    <p class="brand-subtitle">Super Admin Panel</p>
+                    <p class="brand-subtitle">{{ auth()->check() ? ucwords(str_replace(['_','-'], ' ', auth()->user()->account_type)) . ' Panel' : 'User Panel' }}</p>
                 </div>
 
                 <nav class="sidebar-nav">
-                    <a href="{{ url('/admin/dashboard') }}" class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                    <a href="{{ auth()->check() ? route(auth()->user()->getDashboardRoute()) : url('/admin/dashboard') }}" class="nav-item {{ auth()->check() && request()->routeIs(auth()->user()->getDashboardRoute()) ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zm2 0V11h5V6zm7 0v5h5V5.5zM6 13v5.5h5V13zm7 0v5.5h5V13z" /></svg>
                         </span>
                         <span>Dashboard</span>
                     </a>
+                    @if(auth()->check() && auth()->user()->hasRole('kitchen_manager'))
+                        <a href="{{ route('kitchen.new-orders') }}" class="nav-item {{ request()->routeIs('kitchen.new-orders') ? 'active' : '' }}">
+                            <span class="nav-icon">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm0 4h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm4 2v2h4v-2z" /></svg>
+                            </span>
+                            <span>Kitchen Orders</span>
+                        </a>
+                    @endif
                     <a href="#" class="nav-item">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11a4 4 0 1 0-3.999-4A4 4 0 0 0 16 11m-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3m8 1c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4M8 14c-.29 0-.62.02-.97.05A5.61 5.61 0 0 1 10 17v2H2v-2c0-2.21 3.58-3 6-3" /></svg>
@@ -68,12 +76,15 @@
                 </nav>
             </div>
 
-            <a href="#" class="nav-item logout-link">
-                <span class="nav-icon">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17v-2h4V9h-4V7h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2zm9-5-4 4v-3H8v-2h7V8zM5 19h6v2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6v2H5z" /></svg>
-                </span>
-                <span>Log Out</span>
-            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="nav-item logout-link">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17v-2h4V9h-4V7h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2zm9-5-4 4v-3H8v-2h7V8zM5 19h6v2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6v2H5z" /></svg>
+                    </span>
+                    <span>Log Out</span>
+                </button>
+            </form>
         </aside>
 
         <main class="admin-main">

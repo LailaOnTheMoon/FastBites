@@ -134,12 +134,22 @@
 
             <div class="detail-item">
                 <span class="detail-label">Name</span>
-                <span class="detail-value">{{ Auth::user()->name ?? 'John Doe' }}</span>
+                <span class="detail-value">{{ Auth::user()->full_name ?? 'John Doe' }}</span>
             </div>
 
             <div class="detail-item">
                 <span class="detail-label">Phone</span>
-                <span class="detail-value">{{ Auth::user()->phone ?? '+1 (555) 123-4567' }}</span>
+                <span class="detail-value">{{ Auth::user()->phone_number ?? '+1 (555) 123-4567' }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Address</span>
+                <span class="detail-value">{{ Auth::user()->address ?? '123 Main St' }}</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Account Type</span>
+                <span class="detail-value">{{ Auth::user()->account_type ?? 'customer' }}</span>
             </div>
 
             <div class="detail-item">
