@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'FastBites Admin')</title>
+    <title>@yield('title', 'FastBites Kitchen')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,53 +11,53 @@
     @stack('styles')
 </head>
 <body>
-    <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-controls="adminSidebar" aria-expanded="false">
+    <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-controls="kitchenSidebar" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zm0 8h16v2H4zm0-4h16v2H4z" /></svg>
     </button>
     <div class="sidebar-overlay" aria-hidden="true"></div>
     <div class="admin-shell">
-        <aside class="admin-sidebar" id="adminSidebar">
+        <aside class="admin-sidebar" id="kitchenSidebar">
             <div>
                 <div class="brand-block">
                     <div class="sidebar-brand-row">
-                        <a href="{{ auth()->check() ? route(auth()->user()->getDashboardRoute()) : url('/') }}" class="brand-name">FastBites</a>
+                        <a href="{{ route('kitchen.dashboard') }}" class="brand-name">FastBites</a>
                         <button class="drawer-close-button" type="button" aria-label="Close menu">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.41L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3l6.3 6.29 6.29-6.3z" /></svg>
                         </button>
                     </div>
-                    <p class="brand-subtitle">Admin Panel</p>
+                    <p class="brand-subtitle">Kitchen Manager Panel</p>
                 </div>
 
                 <nav class="sidebar-nav">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('kitchen.dashboard') }}" class="nav-item {{ request()->routeIs('kitchen.dashboard') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zm2 0V11h5V6zm7 0v5h5V5.5zM6 13v5.5h5V13zm7 0v5.5h5V13z" /></svg>
                         </span>
                         <span>Dashboard</span>
                     </a>
-                    <a href="{{ route('admin.manage-restaurants') }}" class="nav-item {{ request()->routeIs('admin.manage-restaurants') ? 'active' : '' }}">
+                    <a href="{{ route('kitchen.new-orders') }}" class="nav-item {{ request()->routeIs('kitchen.new-orders') ? 'active' : '' }}">
                         <span class="nav-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm0 4h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm4 2v2h4v-2z" /></svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10l1 3h2v2h-1l-1.1 8.12A2 2 0 0 1 15.92 19H8.08a2 2 0 0 1-1.98-1.88L5 9H4V7h2zm1.02 5 .88 8h6.2l.88-8zM9 2h2v2H9zm4 0h2v2h-2z" /></svg>
                         </span>
-                        <span>Manage Restaurants</span>
+                        <span>New Orders</span>
                     </a>
-                    <a href="{{ route('admin.orders') }}" class="nav-item {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
+                    <a href="{{ route('kitchen.preparing-orders') }}" class="nav-item {{ request()->routeIs('kitchen.preparing-orders') ? 'active' : '' }}">
                         <span class="nav-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm0 4h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm4 2v2h4v-2z" /></svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h2v8H6zm5 0h2v8h-2zm5 0h2v8h-2zM4 12h16v2a8 8 0 0 1-16 0z" /></svg>
                         </span>
-                        <span>Orders</span>
+                        <span>Preparing Orders</span>
                     </a>
-                    <a href="{{ route('admin.reports') }}" class="nav-item {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
+                    <a href="{{ route('kitchen.ready-orders') }}" class="nav-item {{ request()->routeIs('kitchen.ready-orders') ? 'active' : '' }}">
                         <span class="nav-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h2v14h14v2H5zm4 10 3-3 2 2 4-5 1.6 1.2-5.3 6.63-2.1-2.1-2.8 2.8z" /></svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 9.74 8 10 4.6-.26 8-5 8-10V6zm-1.2 13.2L7.6 12l1.4-1.4 1.8 1.8 4.2-4.2 1.4 1.4z" /></svg>
                         </span>
-                        <span>Reports</span>
+                        <span>Ready Orders</span>
                     </a>
-                    <a href="{{ route('admin.settings') }}" class="nav-item {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
+                    <a href="{{ route('kitchen.completed-orders') }}" class="nav-item {{ request()->routeIs('kitchen.completed-orders') ? 'active' : '' }}">
                         <span class="nav-icon">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19.14 12.94.04-.94-.04-.94 2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.24 7.24 0 0 0-1.63-.94L14.4 2.8a.5.5 0 0 0-.49-.4h-3.84a.5.5 0 0 0-.49.4L9.25 5.3c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.82a.5.5 0 0 0 .12.64l2.03 1.58-.04.94.04.94-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.4 1.05.71 1.63.94l.33 2.5a.5.5 0 0 0 .49.4h3.84a.5.5 0 0 0 .49-.4l.33-2.5c.58-.23 1.12-.54 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5" /></svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" /></svg>
                         </span>
-                        <span>Settings</span>
+                        <span>Completed Orders</span>
                     </a>
                 </nav>
             </div>

@@ -15,7 +15,7 @@ Route::get('/test', [TestController::class, 'viewTest'])->name('test');
 Route::get('/updateUserTest', [TestController::class, 'updateUser'])->name('updateUserTest');
 Route::get('/createUserTest', [TestController::class, 'createUser'])->name('createUserTest');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -39,10 +39,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+        Route::view('/manage-restaurants', 'admin.manage-restaurants')->name('manage-restaurants');
+        Route::view('/orders', 'admin.orders')->name('orders');
+        Route::view('/reports', 'admin.reports')->name('reports');
+        Route::view('/settings', 'admin.settings')->name('settings');
     });
 
     Route::prefix('super-admin')->name('super-admin.')->group(function () {
         Route::view('/dashboard', 'super-admin.dashboard')->name('dashboard');
+        Route::view('/manage-admins', 'super-admin.manage-admins')->name('manage-admins');
+        Route::view('/manage-restaurants', 'super-admin.manage-restaurants')->name('manage-restaurants');
+        Route::view('/user-management', 'super-admin.user-management')->name('user-management');
+        Route::view('/system-reports', 'super-admin.system-reports')->name('system-reports');
+        Route::view('/settings', 'super-admin.settings')->name('settings');
+    });
+
+    Route::prefix('user-management')->name('user-management.')->group(function () {
+        Route::view('/dashboard', 'user-management.dashboard')->name('dashboard');
+        Route::view('/all-users', 'user-management.all-users')->name('all-users');
+        Route::view('/user-profiles', 'user-management.user-profiles')->name('user-profiles');
+        Route::view('/user-reports', 'user-management.user-reports')->name('user-reports');
+        Route::view('/settings', 'user-management.settings')->name('settings');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

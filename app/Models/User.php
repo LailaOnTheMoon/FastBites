@@ -13,10 +13,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
+    public const ROLE_SUPER_ADMIN = 'super_admin';
     public const ROLE_ADMIN = 'admin';
     public const ROLE_KITCHEN_MANAGER = 'kitchen_manager';
+    public const ROLE_USER_MANAGER = 'user_manager';
     public const ROLE_CUSTOMER = 'customer';
-    public const ROLE_SUPER_ADMIN = 'super_admin';
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'name',
         'first_name',
         'middle_name',
         'last_name',
