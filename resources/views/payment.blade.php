@@ -11,12 +11,16 @@
 
     <style>
         :root {
-            --orange: #EC6426;
-            --amber: #F8A91F;
-            --dark: #1c1a1a;
-            --light: rgba(255, 255, 255, 0.95);
-            --shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-            --radius: 20px;
+            --main-bg: #F6E8D5;
+            --corner-glow: #F5C57A;
+            --card-bg: #F3DFC4;
+            --button-gradient: linear-gradient(90deg, #F26A21 0%, #F8B11A 100%);
+            --text-dark: #4f3f2f;
+            --text-muted: #6f5c47;
+            --input-bg: #fffdf9;
+            --radius: 25px;
+            --shadow-soft: 0 12px 28px rgba(41, 18, 3, 0.15);
+            --shadow-deep: 0 18px 40px rgba(30, 19, 6, 0.24);
         }
 
         * {
@@ -27,170 +31,171 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--orange);
-            color: var(--dark);
-            padding: 28px 18px 40px;
+            color: var(--text-dark);
+            background: radial-gradient(circle at 15% 25%, rgba(245,197,122,0.35) 0%, transparent 45%),
+                        radial-gradient(circle at 85% 85%, rgba(245,197,122,0.30) 0%, transparent 48%),
+                        var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 720px;
-            margin: 0 auto;
+            width: min(420px, calc(100% - 32px));
+            margin: 0;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 22px;
         }
 
         .header h1 {
             margin: 0;
-            font-size: clamp(2.3rem, 4vw, 3rem);
+            font-size: clamp(1.9rem, 6vw, 2.6rem);
             font-weight: 800;
-            color: var(--amber);
+            color: #8d5b2f;
             letter-spacing: 0.04em;
         }
 
         .header p {
             margin: 10px 0 0;
-            font-size: 1.05rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            color: var(--text-muted);
         }
 
-        .payment-options {
-            display: grid;
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .option {
-            background: var(--light);
+        .login-card {
+            background: var(--card-bg);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 24px;
+            box-shadow: var(--shadow-deep);
+            padding: 30px 26px 28px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            color: var(--text-dark);
+        }
+
+        .login-card h2 {
+            margin: 0 0 16px;
+            font-size: 1.75rem;
+            letter-spacing: 0.02em;
+        }
+
+        .login-card p {
+            margin: 0 0 20px;
+            font-size: 0.97rem;
+            color: var(--text-muted);
+        }
+
+        .field {
             display: flex;
-            align-items: center;
-            gap: 18px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-            border: 2px solid transparent;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
-        .option:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        .field label {
+            font-weight: 500;
+            color: #8a664a;
+            font-size: 0.9rem;
         }
 
-        .option.selected {
-            border-color: var(--amber);
-            background: rgba(248, 169, 31, 0.1);
-        }
-
-        .option input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--orange);
-            margin: 0;
-        }
-
-        .option-content {
-            flex: 1;
-        }
-
-        .option-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .option-desc {
-            margin: 6px 0 0;
-            font-size: 0.95rem;
-            opacity: 0.8;
-        }
-
-        .btn-next {
+        .field input {
             width: 100%;
-            padding: 16px 20px;
+            border: 1px solid rgba(131, 92, 50, 0.25);
+            border-radius: 14px;
+            padding: 13px 14px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: #483424;
+            box-shadow: 0 8px 16px rgba(31, 15, 5, 0.07);
+            transition: border .2s ease, box-shadow .2s ease;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #f26a21;
+            box-shadow: 0 0 0 4px rgba(242,106,33,0.12);
+        }
+
+        .btn-login {
+            width: 100%;
             border: none;
-            border-radius: var(--radius);
-            background: var(--amber);
-            color: var(--dark);
-            font-weight: 800;
-            font-size: 1.1rem;
+            border-radius: 16px;
+            padding: 14px 0;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
+            background: var(--button-gradient);
+            box-shadow: 0 12px 24px rgba(242, 106, 33, 0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .btn-next:hover {
+        .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 14px 28px rgba(242, 106, 33, 0.42);
         }
 
-        .btn-next:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-login:active {
+            transform: translateY(0px);
+            box-shadow: 0 9px 18px rgba(242, 106, 33, 0.35);
         }
 
-        @media (max-width: 600px) {
-            .option {
-                flex-direction: column;
-                text-align: center;
-                gap: 12px;
+        @media (max-width: 620px) {
+            .login-card {
+                padding: 24px;
+            }
+
+            .field input {
+                font-size: 0.98rem;
             }
         }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>FastBites</h1>
-            <p>Choose your payment method to complete the order.</p>
-        </header>
+        <article class="login-card">
+            <header class="header">
+                <h1>FastBites</h1>
+                <p>Welcome back — sign in to continue to your dashboard.</p>
+            </header>
 
-        <form id="paymentForm">
-            <div class="payment-options">
-                <label class="option" for="card">
-                    <input type="radio" id="card" name="payment" value="card" required>
-                    <div class="option-content">
-                        <h3 class="option-title">Credit/Debit Card</h3>
-                        <p class="option-desc">Secure and instant payment via card. Visa, Mastercard, and more accepted.</p>
-                    </div>
-                </label>
+            <form id="loginForm" autocomplete="off">
+                <h2>Premium Account Access</h2>
+                <p>Securely login with your credentials in a warm, premium interface.</p>
 
-                <label class="option" for="cash">
-                    <input type="radio" id="cash" name="payment" value="cash" required>
-                    <div class="option-content">
-                        <h3 class="option-title">Cash on Delivery</h3>
-                        <p class="option-desc">Pay in cash when your order arrives. No card needed.</p>
-                    </div>
-                </label>
-            </div>
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
 
-            <button type="submit" class="btn-next" id="nextBtn" disabled>Next</button>
-        </form>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login">Log In</button>
+            </form>
+        </article>
     </div>
 
     <script>
-        const options = document.querySelectorAll('.option');
-        const nextBtn = document.getElementById('nextBtn');
-
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                option.classList.add('selected');
-                nextBtn.disabled = false;
-            });
-        });
-
-        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const selected = document.querySelector('input[name="payment"]:checked');
-            if (selected) {
-                alert(`Payment method selected: ${selected.value}`);
-                // Here you can redirect or submit to backend
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Please fill in both email and password.');
+                return;
             }
+
+            // Temporary behavior; implement actual authentication endpoint logic.
+            alert(`Signed in with ${email}. Redirecting...`);
+            // window.location.href = '/dashboard';
         });
     </script>
 </body>

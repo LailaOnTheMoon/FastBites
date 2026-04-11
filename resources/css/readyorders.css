@@ -1,8 +1,11 @@
 body.kitchen-page {
-  --orange: #EC6426;   /* برتقالي */
-  --amber: #F8A91F;    /* أصفر */
-  --dark: #1c1a1a;
-  background: linear-gradient(135deg, var(--orange), var(--amber));
+  --button-start: #F26A21;
+  --button-end: #F8B11A;
+  --bg: #F6E8D5;
+  --card: #F3DFC4;
+  --glow: #F5C57A;
+  --dark: #3d2a18;
+  background: linear-gradient(135deg, var(--bg), var(--card));
   font-family: 'Poppins', 'Inter', sans-serif;
   min-height: 100vh;
   display: flex;
@@ -60,6 +63,6 @@ body.kitchen-page {
 
 /* المربع الأصفر بنفس التنسيقات السابقة */
 .status-box.delivered {
-  background: var(--amber);
+  background: var(--glow);
   color: var(--dark);
 }

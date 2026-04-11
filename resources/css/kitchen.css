@@ -1,8 +1,11 @@
 body.kitchen-page {
-  --orange: #EC6426;
-  --amber: #F8A91F;
-  --dark: #1c1a1a;
-  background: linear-gradient(135deg, #ffb347, #ffcc33, #ffd700, #ffa500);
+  --button-start: #F26A21;
+  --button-end: #F8B11A;
+  --bg: #F6E8D5;
+  --card: #F3DFC4;
+  --glow: #F5C57A;
+  --dark: #3d2a18;
+  background: linear-gradient(135deg, var(--bg), var(--card));
   font-family: 'Poppins', 'Inter', sans-serif;
   min-height: 100vh;
   display: flex;
@@ -26,7 +29,7 @@ body.kitchen-page {
 }
 
 .sub-box {
-  background: var(--amber);
+  background: var(--card);
   color: var(--dark);
   padding: 16px;
   border-radius: 18px;

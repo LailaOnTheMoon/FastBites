@@ -11,9 +11,12 @@
 
     <style>
         :root {
-            --orange: #EC6426;
-            --amber: #F8A91F;
-            --dark: #1c1a1a;
+            --button-start: #F26A21;
+            --button-end: #F8B11A;
+            --bg: #F6E8D5;
+            --card: #F3DFC4;
+            --glow: #F5C57A;
+            --dark: #3d2a18;
             --light: rgba(255, 255, 255, 0.95);
             --shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
             --radius: 20px;
@@ -27,7 +30,7 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--orange);
+            background: var(--bg);
             color: var(--dark);
             padding: 28px 18px 40px;
         }
@@ -46,7 +49,7 @@
             margin: 0;
             font-size: clamp(2.3rem, 4vw, 3rem);
             font-weight: 800;
-            color: var(--amber);
+            color: var(--button-end);
             letter-spacing: 0.04em;
         }
 
@@ -99,8 +102,8 @@
             padding: 16px 20px;
             border: none;
             border-radius: var(--radius);
-            background: var(--amber);
-            color: var(--dark);
+            background: linear-gradient(135deg, var(--button-start), var(--button-end));
+            color: white;
             font-weight: 800;
             font-size: 1.1rem;
             cursor: pointer;

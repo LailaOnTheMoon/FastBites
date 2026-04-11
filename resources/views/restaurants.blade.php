@@ -12,9 +12,12 @@
 
     <style>
         :root {
-            --orange: #EC6426;
-            --amber: #F8A91F;
-            --dark: #1c1a1a;
+            --button-start: #F26A21;
+            --button-end: #F8B11A;
+            --bg: #F6E8D5;
+            --card: #F3DFC4;
+            --glow: #F5C57A;
+            --dark: #3d2a18;
             --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.12);
             --radius-lg: 22px;
         }
@@ -28,7 +31,7 @@
             min-height: 100vh;
             font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--dark);
-            background: var(--orange);
+            background: var(--bg);
             position: relative;
             overflow-x: hidden;
             padding: 28px 18px 56px;
@@ -45,7 +48,7 @@
             text-align: center;
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 700;
-            color: var(--amber);
+            color: var(--button-end);
             margin-bottom: 40px;
             text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
@@ -57,7 +60,7 @@
         }
 
         .restaurant-card {
-            background: var(--amber);
+            background: var(--card);
             border-radius: var(--radius-lg);
             padding: 24px;
             box-shadow: var(--shadow-soft);

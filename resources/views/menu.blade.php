@@ -11,9 +11,12 @@
 
     <style>
         :root {
-            --orange: #EC6426;
-            --amber: #F8A91F;
-            --dark: #1c1a1a;
+            --button-start: #F26A21;
+            --button-end: #F8B11A;
+            --bg: #F6E8D5;
+            --card: #F3DFC4;
+            --glow: #F5C57A;
+            --dark: #3d2a18;
             --light: rgba(255, 255, 255, 0.9);
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
             --radius: 20px;
@@ -27,7 +30,7 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--orange);
+            background: var(--bg);
             color: var(--dark);
             padding: 24px 18px 40px;
         }
@@ -41,7 +44,7 @@
             text-align: center;
             font-size: clamp(2.3rem, 4vw, 3rem);
             font-weight: 800;
-            color: var(--amber);
+            color: var(--button-end);
             margin: 0;
             margin-bottom: 10px;
             text-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
@@ -78,7 +81,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(248, 169, 31, 0.15);
+            background: rgba(245, 197, 122, 0.18);
             pointer-events: none;
         }
 
@@ -153,7 +156,7 @@
         .controls input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: var(--orange);
+            accent-color: var(--button-start);
         }
 
         .total-box {
@@ -177,7 +180,7 @@
         .total-amount {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--orange);
+            color: var(--button-start);
         }
 
         @media (max-width: 650px) {

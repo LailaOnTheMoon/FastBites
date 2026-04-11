@@ -11,12 +11,16 @@
 
     <style>
         :root {
-            --orange: #EC6426;
-            --amber: #F8A91F;
-            --dark: #1c1a1a;
-            --light: rgba(255, 255, 255, 0.95);
-            --shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-            --radius: 20px;
+            --main-bg: #F6E8D5;
+            --corner-glow: #F5C57A;
+            --card-bg: #F3DFC4;
+            --button-gradient: linear-gradient(90deg, #F26A21 0%, #F8B11A 100%);
+            --text-dark: #4f3f2f;
+            --text-muted: #6f5c47;
+            --input-bg: #fffdf9;
+            --radius: 25px;
+            --shadow-soft: 0 12px 28px rgba(41, 18, 3, 0.15);
+            --shadow-deep: 0 18px 40px rgba(30, 19, 6, 0.24);
         }
 
         * {
@@ -27,167 +31,170 @@
             margin: 0;
             min-height: 100vh;
             font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--orange);
-            color: var(--dark);
-            padding: 28px 18px 40px;
+            color: var(--text-dark);
+            background: radial-gradient(circle at 15% 25%, rgba(245,197,122,0.35) 0%, transparent 45%),
+                        radial-gradient(circle at 85% 85%, rgba(245,197,122,0.30) 0%, transparent 48%),
+                        var(--main-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 600px;
-            margin: 0 auto;
+            width: min(420px, calc(100% - 32px));
+            margin: 0;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 22px;
         }
 
         .header h1 {
             margin: 0;
-            font-size: clamp(2.3rem, 4vw, 3rem);
+            font-size: clamp(1.9rem, 6vw, 2.6rem);
             font-weight: 800;
-            color: var(--amber);
+            color: #8d5b2f;
             letter-spacing: 0.04em;
         }
 
         .header p {
             margin: 10px 0 0;
-            font-size: 1.05rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            color: var(--text-muted);
         }
 
-        .card-form {
-            background: var(--light);
+        .login-card {
+            background: var(--card-bg);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px 24px;
+            box-shadow: var(--shadow-deep);
+            padding: 30px 26px 28px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            color: var(--text-dark);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .login-card h2 {
+            margin: 0 0 16px;
+            font-size: 1.75rem;
+            letter-spacing: 0.02em;
         }
 
-        .form-group label {
-            display: block;
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 8px;
-            color: var(--dark);
+        .login-card p {
+            margin: 0 0 20px;
+            font-size: 0.97rem;
+            color: var(--text-muted);
         }
 
-        .form-group input {
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            font-weight: 500;
+            color: #8a664a;
+            font-size: 0.9rem;
+        }
+
+        .field input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
+            border: 1px solid rgba(131, 92, 50, 0.25);
+            border-radius: 14px;
+            padding: 13px 14px;
             font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.2s ease;
+            background: var(--input-bg);
+            color: #483424;
+            box-shadow: 0 8px 16px rgba(31, 15, 5, 0.07);
+            transition: border .2s ease, box-shadow .2s ease;
         }
 
-        .form-group input:focus {
+        .field input:focus {
             outline: none;
-            border-color: var(--amber);
+            border-color: #f26a21;
+            box-shadow: 0 0 0 4px rgba(242,106,33,0.12);
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .btn-next {
+        .btn-login {
             width: 100%;
-            margin-top: 24px;
-            padding: 16px 20px;
             border: none;
-            border-radius: var(--radius);
-            background: var(--amber);
-            color: var(--dark);
-            font-weight: 800;
-            font-size: 1.1rem;
+            border-radius: 16px;
+            padding: 14px 0;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
+            background: var(--button-gradient);
+            box-shadow: 0 12px 24px rgba(242, 106, 33, 0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .btn-next:hover {
+        .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 14px 28px rgba(242, 106, 33, 0.42);
         }
 
-        .security-note {
-            margin-top: 16px;
-            font-size: 0.9rem;
-            opacity: 0.7;
-            text-align: center;
+        .btn-login:active {
+            transform: translateY(0px);
+            box-shadow: 0 9px 18px rgba(242, 106, 33, 0.35);
         }
 
-        @media (max-width: 500px) {
-            .form-row {
-                grid-template-columns: 1fr;
+        @media (max-width: 620px) {
+            .login-card {
+                padding: 24px;
+            }
+
+            .field input {
+                font-size: 0.98rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>FastBites</h1>
-            <p>Enter your card details securely.</p>
-        </header>
+        <article class="login-card">
+            <header class="header">
+                <h1>FastBites</h1>
+                <p>Welcome back — sign in to continue to your dashboard.</p>
+            </header>
 
-        <form class="card-form" id="cardForm">
-            <div class="form-group">
-                <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
-            </div>
+            <form id="loginForm" autocomplete="off">
+                <h2>Premium Account Access</h2>
+                <p>Securely login with your credentials in a warm, premium interface.</p>
 
-            <div class="form-group">
-                <label for="cardName">Name on Card</label>
-                <input type="text" id="cardName" name="cardName" placeholder="John Doe" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="expiry">Expiry Date</label>
-                    <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5" required>
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="4" required>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
-            </div>
 
-            <button type="submit" class="btn-next">Next</button>
-
-            <p class="security-note">🔒 Your payment information is encrypted and secure.</p>
-        </form>
+                <button type="submit" class="btn-login">Log In</button>
+            </form>
+        </article>
     </div>
 
     <script>
-        // Format card number with spaces
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-            let formatted = value.match(/.{1,4}/g)?.join(' ') || '';
-            e.target.value = formatted;
-        });
-
-        // Format expiry date
-        document.getElementById('expiry').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
-            e.target.value = value;
-        });
-
-        // Basic form validation
-        document.getElementById('cardForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Add your validation or submission logic here
-            alert('Card details submitted!');
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Please fill in both email and password.');
+                return;
+            }
+
+            // Temporary behavior; implement actual authentication endpoint logic.
+            alert(`Signed in with ${email}. Redirecting...`);
+            // window.location.href = '/dashboard';
         });
     </script>
 </body>
