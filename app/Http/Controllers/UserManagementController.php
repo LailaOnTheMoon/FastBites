@@ -27,13 +27,13 @@ class UserManagementController extends Controller
 
         $roleUpdatesPending = Customer::where(function ($query) {
             $query->whereNull('phone_number')
-                ->orWhereNull('address');
+                ->orWhereNull('address_line_1');
         })->count();
 
         $reportsOpen = Customer::where(function ($query) {
             $query->whereNull('email_verified_at')
                 ->orWhereNull('phone_number')
-                ->orWhereNull('address');
+                ->orWhereNull('address_line_1');
         })->count();
 
         return view('user-management.dashboard', compact(
@@ -59,7 +59,7 @@ class UserManagementController extends Controller
         $totalUsers = Customer::count();
 
         $completedProfiles = Customer::whereNotNull('phone_number')
-            ->whereNotNull('address')
+            ->whereNotNull('address_line_1')
             ->count();
 
         $completedProfilesPercent = $totalUsers > 0
@@ -74,7 +74,7 @@ class UserManagementController extends Controller
 
         $profilesNeedingUpdates = Customer::where(function ($query) {
             $query->whereNull('phone_number')
-                ->orWhereNull('address');
+                ->orWhereNull('address_line_1');
         })->count();
 
         return view('user-management.user-profiles', compact(
@@ -87,7 +87,7 @@ class UserManagementController extends Controller
     public function userReports()
     {
         $usersMissingPhone = Customer::whereNull('phone_number')->count();
-        $usersMissingAddress = Customer::whereNull('address')->count();
+        $usersMissingAddress = Customer::whereNull('address_line_1')->count();
         $usersUnverified = Customer::whereNull('email_verified_at')->count();
 
         return view('user-management.user-reports', compact(
@@ -114,7 +114,7 @@ class UserManagementController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:customers,email,' . $user->id,
             'phone_number' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
+            'address_line_1' => 'nullable|string|max:255',
         ]);
 
         $user->update($validated);
