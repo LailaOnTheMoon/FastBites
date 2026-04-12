@@ -14,7 +14,9 @@
     <button class="mobile-menu-toggle" type="button" aria-label="Open menu" aria-controls="adminSidebar" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v2H4zm0 8h16v2H4zm0-4h16v2H4z" /></svg>
     </button>
+
     <div class="sidebar-overlay" aria-hidden="true"></div>
+
     <div class="admin-shell">
         <aside class="admin-sidebar" id="adminSidebar">
             <div>
@@ -35,24 +37,37 @@
                         </span>
                         <span>Dashboard</span>
                     </a>
+
+                    <a href="{{ route('admin.employees') }}" class="nav-item {{ request()->routeIs('admin.employees') || request()->routeIs('admin.employees.create') || request()->routeIs('admin.employees.edit') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M16 11a4 4 0 1 0-3.999-4A4 4 0 0 0 16 11zm-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zM8 14c-.29 0-.62.02-.97.05C4.47 14.3 2 15.29 2 17v2h6v-1c0-1.23.62-2.28 1.67-3.11A7.29 7.29 0 0 0 8 14z"/>
+                            </svg>
+                        </span>
+                        <span>Manage Employees</span>
+                    </a>
+
                     <a href="{{ route('admin.manage-restaurants') }}" class="nav-item {{ request()->routeIs('admin.manage-restaurants') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm0 4h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm4 2v2h4v-2z" /></svg>
                         </span>
                         <span>Manage Restaurants</span>
                     </a>
+
                     <a href="{{ route('admin.orders') }}" class="nav-item {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2H3zm0 4h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm4 2v2h4v-2z" /></svg>
                         </span>
                         <span>Orders</span>
                     </a>
+
                     <a href="{{ route('admin.reports') }}" class="nav-item {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h2v14h14v2H5zm4 10 3-3 2 2 4-5 1.6 1.2-5.3 6.63-2.1-2.1-2.8 2.8z" /></svg>
                         </span>
                         <span>Reports</span>
                     </a>
+
                     <a href="{{ route('admin.settings') }}" class="nav-item {{ request()->routeIs('admin.settings') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19.14 12.94.04-.94-.04-.94 2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.24 7.24 0 0 0-1.63-.94L14.4 2.8a.5.5 0 0 0-.49-.4h-3.84a.5.5 0 0 0-.49.4L9.25 5.3c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.82a.5.5 0 0 0 .12.64l2.03 1.58-.04.94.04.94-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.4 1.05.71 1.63.94l.33 2.5a.5.5 0 0 0 .49.4h3.84a.5.5 0 0 0 .49-.4l.33-2.5c.58-.23 1.12-.54 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64zM12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5" /></svg>
@@ -106,6 +121,7 @@
             });
         }
     </script>
+
     @stack('scripts')
 </body>
 </html>

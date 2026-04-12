@@ -18,10 +18,37 @@
                     <p>Prepared profile metrics for the user management team.</p>
                 </div>
             </div>
+
             <div class="revenue-list">
-                <div class="revenue-item"><div class="revenue-meta"><span>Completed profiles</span><strong>91%</strong></div><div class="progress-track"><span class="progress-fill" style="width: 91%;"></span></div></div>
-                <div class="revenue-item"><div class="revenue-meta"><span>Verified contacts</span><strong>88%</strong></div><div class="progress-track"><span class="progress-fill" style="width: 88%;"></span></div></div>
-                <div class="revenue-item"><div class="revenue-meta"><span>Profiles needing updates</span><strong>19%</strong></div><div class="progress-track"><span class="progress-fill" style="width: 19%;"></span></div></div>
+                <div class="revenue-item">
+                    <div class="revenue-meta">
+                        <span>Completed profiles</span>
+                        <strong>{{ $completedProfilesPercent }}%</strong>
+                    </div>
+                    <div class="progress-track">
+                        <span class="progress-fill" style="width: {{ $completedProfilesPercent }}%;"></span>
+                    </div>
+                </div>
+
+                <div class="revenue-item">
+                    <div class="revenue-meta">
+                        <span>Verified contacts</span>
+                        <strong>{{ $verifiedContactsPercent }}%</strong>
+                    </div>
+                    <div class="progress-track">
+                        <span class="progress-fill" style="width: {{ $verifiedContactsPercent }}%;"></span>
+                    </div>
+                </div>
+
+                <div class="revenue-item">
+                    <div class="revenue-meta">
+                        <span>Profiles needing updates</span>
+                        <strong>{{ $profilesNeedingUpdates }}</strong>
+                    </div>
+                    <div class="progress-track">
+                        <span class="progress-fill" style="width: 30%;"></span>
+                    </div>
+                </div>
             </div>
         </article>
 
@@ -29,13 +56,14 @@
             <div class="panel-header">
                 <div>
                     <h3>Verification Notes</h3>
-                    <p>Static notes for profile review.</p>
+                    <p>Dynamic notes for profile review.</p>
                 </div>
             </div>
+
             <ul class="status-legend">
-                <li><span class="legend-dot orange"></span>12 restaurant contacts are missing profile photos.</li>
-                <li><span class="legend-dot amber"></span>7 support accounts need phone verification.</li>
-                <li><span class="legend-dot yellow"></span>4 admin profiles require role review.</li>
+                <li><span class="legend-dot orange"></span>{{ $profilesNeedingUpdates }} profiles need data updates.</li>
+                <li><span class="legend-dot amber"></span>{{ $verifiedContactsPercent }}% of users have verified contacts.</li>
+                <li><span class="legend-dot yellow"></span>{{ $completedProfilesPercent }}% of user profiles are complete.</li>
             </ul>
         </article>
     </section>

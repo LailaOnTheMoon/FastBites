@@ -3,19 +3,10 @@
 @section('title', 'User Reports')
 
 @section('content')
-    @php
-        $reports = [
-            ['type' => 'Profile Issue', 'user' => 'Mira Khaled', 'priority' => 'Medium', 'status' => 'Open'],
-            ['type' => 'Access Review', 'user' => 'Yousef Adel', 'priority' => 'High', 'status' => 'In Review'],
-            ['type' => 'Duplicate Account', 'user' => 'Sara Jamal', 'priority' => 'Medium', 'status' => 'Open'],
-            ['type' => 'Verification Delay', 'user' => 'Rami Adel', 'priority' => 'Low', 'status' => 'Resolved'],
-        ];
-    @endphp
-
     <header class="topbar">
         <div class="topbar-copy">
             <h1>User Reports</h1>
-            <p>Track reported issues, reviews, and user account escalations.</p>
+            <p>Track user-related issues based on current account data.</p>
         </div>
     </header>
 
@@ -23,28 +14,39 @@
         <div class="panel-header panel-header-stack">
             <div>
                 <h3>Reports Table</h3>
-                <p>Static reporting layout for user-related cases.</p>
+                <p>Dynamic reporting summary derived from user records.</p>
             </div>
         </div>
+
         <div class="table-wrap">
-            <table class="orders-table">
+            <table>
                 <thead>
                     <tr>
                         <th>Report Type</th>
-                        <th>User</th>
+                        <th>Count</th>
                         <th>Priority</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
-                        <tr>
-                            <td>{{ $report['type'] }}</td>
-                            <td>{{ $report['user'] }}</td>
-                            <td>{{ $report['priority'] }}</td>
-                            <td><span class="status-pill {{ $report['status'] === 'Resolved' ? 'delivered' : 'pending' }}">{{ $report['status'] }}</span></td>
-                        </tr>
-                    @endforeach
+                    <tr>
+                        <td>Users Missing Phone</td>
+                        <td>{{ $usersMissingPhone }}</td>
+                        <td>Medium</td>
+                        <td><span class="status-pill pending">Open</span></td>
+                    </tr>
+                    <tr>
+                        <td>Users Missing Address</td>
+                        <td>{{ $usersMissingAddress }}</td>
+                        <td>Medium</td>
+                        <td><span class="status-pill pending">Open</span></td>
+                    </tr>
+                    <tr>
+                        <td>Unverified Accounts</td>
+                        <td>{{ $usersUnverified }}</td>
+                        <td>High</td>
+                        <td><span class="status-pill canceled">In Review</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

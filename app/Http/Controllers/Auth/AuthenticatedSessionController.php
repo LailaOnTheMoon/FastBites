@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,25 +30,29 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $user = auth()->user();
+        $user = Auth::guard('web')->user() ?? Auth::guard('customer')->user();
 
-if ($user->account_type === \App\Models\User::ROLE_SUPER_ADMIN) {
-    return redirect()->route('super-admin.dashboard');
-}
+        if ($user instanceof Customer) {
+            return redirect()->route('dashboard');
+        }
 
-if ($user->account_type === \App\Models\User::ROLE_ADMIN) {
-    return redirect()->route('admin.dashboard');
-}
+        if ($user instanceof User && $user->account_type === User::ROLE_SUPER_ADMIN) {
+            return redirect()->route('super-admin.dashboard');
+        }
 
-if ($user->account_type === \App\Models\User::ROLE_KITCHEN_MANAGER) {
-    return redirect()->route('kitchen.dashboard');
-}
+        if ($user instanceof User && $user->account_type === User::ROLE_ADMIN) {
+            return redirect()->route('admin.dashboard');
+        }
 
-if ($user->account_type === \App\Models\User::ROLE_USER_MANAGER) {
-    return redirect()->route('user-management.dashboard');
-}
+        if ($user instanceof User && $user->account_type === User::ROLE_KITCHEN_MANAGER) {
+            return redirect()->route('kitchen.dashboard');
+        }
 
-return redirect('/');
+        if ($user instanceof User && $user->account_type === User::ROLE_USER_MANAGER) {
+            return redirect()->route('user-management.dashboard');
+        }
+
+        return redirect('/');
     }
 
     /**
@@ -54,7 +60,13 @@ return redirect('/');
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
+
+        if (Auth::guard('customer')->check()) {
+            Auth::guard('customer')->logout();
+        }
 
         $request->session()->invalidate();
 

@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -34,28 +32,24 @@ class RegisteredUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:customers,email'],
             'phone_number' => ['nullable', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-            'account_type' => ['required', 'string', Rule::in(User::validRoles())],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        $customer = Customer::create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
-            'account_type' => $request->account_type,
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        event(new Registered($customer));
 
-        Auth::login($user);
-
-        return redirect(route($user->getDashboardRoute(), absolute: false));
+        return redirect()->route('login')->with('success', 'Customer account created successfully. Please log in.');
     }
 }

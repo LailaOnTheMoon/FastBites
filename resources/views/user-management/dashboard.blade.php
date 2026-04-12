@@ -5,10 +5,10 @@
 @section('content')
     @php
         $stats = [
-            ['value' => '1,524', 'label' => 'Total Users'],
-            ['value' => '248', 'label' => 'New Users'],
-            ['value' => '87%', 'label' => 'Active Users'],
-            ['value' => '34', 'label' => 'Reports Open'],
+            ['value' => $totalUsers, 'label' => 'Total Users'],
+            ['value' => $newUsers, 'label' => 'New Users'],
+            ['value' => $activeUsers, 'label' => 'Active Users'],
+            ['value' => $reportsOpen, 'label' => 'Reports Open'],
         ];
     @endphp
 
@@ -42,14 +42,14 @@
             <div class="panel-header">
                 <div>
                     <h3>Account Health</h3>
-                    <p>Static summary for account operations.</p>
+                    <p>Dynamic summary for account operations.</p>
                 </div>
             </div>
             <div class="summary-row">
-                <div class="summary-card"><strong>96%</strong><span>Verified profiles</span></div>
-                <div class="summary-card"><strong>21</strong><span>Escalated reports</span></div>
-                <div class="summary-card"><strong>18</strong><span>Profiles under review</span></div>
-                <div class="summary-card"><strong>12</strong><span>Role updates pending</span></div>
+                <div class="summary-card"><strong>{{ $verifiedProfiles }}</strong><span>Verified profiles</span></div>
+                <div class="summary-card"><strong>{{ $reportsOpen }}</strong><span>Escalated reports</span></div>
+                <div class="summary-card"><strong>{{ $profilesUnderReview }}</strong><span>Profiles under review</span></div>
+                <div class="summary-card"><strong>{{ $roleUpdatesPending }}</strong><span>Role updates pending</span></div>
             </div>
         </article>
 
