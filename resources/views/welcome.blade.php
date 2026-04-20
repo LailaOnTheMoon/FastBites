@@ -1,446 +1,304 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'FastBites') }} — Fast Food, Faster Delivery</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Bites</title>
 
-    <!-- Modern font -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --button-start: #F26A21;
-            --button-end: #F8B11A;
-            --bg: #F6E8D5;
-            --card: #F3DFC4;
-            --glow: #F5C57A;
-            --light: #FDE3CF;
-            --dark: #3d2a18;
-            --glass: rgba(255, 255, 255, 0.26);
-            --glass-border: rgba(255, 255, 255, 0.45);
-            --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.18);
-            --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --radius-lg: 22px;
-        }
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: var(--dark);
-            background: var(--bg);
-            position: relative;
-            overflow-x: hidden;
-            padding: 28px 18px 56px;
-        }
-
-        /* soft grain */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
-            pointer-events: none;
-            mix-blend-mode: soft-light;
-            z-index: 0;
-        }
-
-        .layout {
-            max-width: 1180px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Top bar */
-        .topbar {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 32px;
-        }
-
-        .brand {
-            justify-self: center;
-            font-weight: 700;
-            font-size: clamp(1.4rem, 2vw, 1.8rem);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--dark);
-        }
-
-        .menu-btn {
-            justify-self: end;
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            backdrop-filter: blur(8px);
-            box-shadow: var(--shadow-soft);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-
-        .menu-btn span,
-        .menu-btn span::before,
-        .menu-btn span::after {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: var(--dark);
-            border-radius: 12px;
-            position: relative;
-            transition: transform 0.22s ease, width 0.22s ease;
-        }
-
-        .menu-btn span::before,
-        .menu-btn span::after {
-            content: "";
-            position: absolute;
-            left: 0;
-        }
-
-        .menu-btn span::before { top: -6px; }
-        .menu-btn span::after { top: 6px; }
-
-        .menu-btn:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.42);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
-        }
-
-        /* Hero */
-        .hero {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 28px;
-            align-items: center;
-        }
-
-        .hero-card {
-            background: var(--card);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: clamp(22px, 3vw, 32px);
-            backdrop-filter: blur(18px);
-            box-shadow: var(--shadow-strong);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-card::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(245, 197, 122, 0.25), transparent 55%),
-                        radial-gradient(circle at 80% 0%, rgba(245, 197, 122, 0.18), transparent 45%);
-            pointer-events: none;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            font-size: 0.88rem;
-            letter-spacing: 0.01em;
-        }
-
-        h1 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            line-height: 1.1;
-            margin: 14px 0 10px;
-            color: var(--dark);
-        }
-
-        .subhead {
-            font-size: 1.02rem;
-            color: var(--dark);
-            max-width: 34ch;
-            margin-bottom: 18px;
-        }
-
-        .cta-stack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin: 18px 0 10px;
-    width: 100%;
-}
-
-.cta-stack a {
-    width: 100%;
-    text-align: center;
-}
-
-
-        .glass-btn {
-            padding: 14px 18px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            color: var(--dark);
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            backdrop-filter: blur(12px);
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-            text-align: center;
-            display : block;
-        }
-        
-
-        .glass-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
-        }
-
-        .glass-btn.primary {
-            background: linear-gradient(120deg, var(--button-start), var(--button-end));
-            color: white;
-        }
-
-        .glass-btn.primary:hover {
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.26), rgba(255, 230, 200, 0.3));
-        }
-
-        .logo-stack {
-            display: grid;
-            gap: 18px;
-            justify-items: center;
-            text-align: center;
-        }
-
-        .logo-mark {
-            width: clamp(140px, 22vw, 190px);
-            aspect-ratio: 1;
-            border-radius: 32px;
-            background: linear-gradient(135deg, var(--button-start), var(--button-end));
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-            display: grid;
-            place-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo-mark::after {
-            content: "";
-            position: absolute;
-            inset: 12%;
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-        }
-
-        .logo-text {
-            position: relative;
-            font-weight: 800;
-            font-size: clamp(2rem, 4vw, 2.6rem);
-            letter-spacing: 0.08em;
-            color: var(--dark);
-            text-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
-        }
-
-        .meta {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-            color: var(--dark);
-            font-weight: 600;
-        }
-
-        .chip {
-            padding: 8px 14px;
-            background: var(--glass);
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .features {
-            margin-top: 46px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .feature-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 16px 18px;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-soft);
-            color: var(--dark);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.36);
-            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.22);
-        }
-
-        .feature-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: var(--glass);
-            display: grid;
-            place-items: center;     
-            font-size: 1.35rem;
-        }
-
-        .feature-title {
-            margin: 2px 0 6px;
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .feature-copy {
-            color: var(--dark);
-            font-size: 0.94rem;
-            line-height: 1.5;
-        }
-
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            color: var(--dark);
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
-
-        @media (min-width: 900px) {
-    body {
-        padding: 42px 36px 72px;
-    }
-    .hero {
-        grid-template-columns: 1.05fr 0.95fr;
-        gap: 34px;
-    }
-}
-
-
-        @media (max-width: 520px) {
-            .topbar {
-                grid-template-columns: auto 1fr auto;
-            }
-            .brand {
-                justify-self: center;
-            }
-            h1 {
-                font-size: 1.8rem;
+    <!-- Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF8C00',
+                        secondary: '#FFD580',
+                        light: '#FFF8F0'
+                    }
+                }
             }
         }
-    </style>
+    </script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 </head>
-<body>
-    <div class="layout">
-        <header class="topbar">
-            <div></div>
-            <div class="brand">FastBites</div>
-            <button class="menu-btn" aria-label="Open menu">
-                <span></span>
-            </button>
-        </header>
+<body class="bg-light font-sans">
 
-        <main class="hero">
-            <div class="logo-stack">
-                <div class="logo-mark">
-                    <div class="logo-text">FB</div>
-                </div>
-                <div class="meta">
-                    <div class="chip">Lightning delivery</div>
-                    <div class="chip">Hot. Fast. Fresh.</div>
-                    <div class="chip">Powered by local kitchens</div>
-                </div>
+<!-- ================= NAVBAR ================= -->
+<header class="bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('images/logo.png') }}"
+     class="w-14 h-14 object-contain drop-shadow-md hover:scale-110 transition duration-300">
+            <h1 class="text-xl font-bold text-orange-500">Fast Bites</h1>
+        </div>
+
+        <!-- Links -->
+        <nav class="hidden md:flex gap-8 text-yellow-700">
+            <a href="#" class="hover:text-orange-500">Home</a>
+            <a href="#" class="hover:text-orange-500">Menu</a>
+            <a href="#" class="hover:text-orange-500">About</a>
+            <a href="#" class="hover:text-orange-500">Contact</a>
+            <a href="#" class="hover:text-orange-500">Log In</a>
+            
+        </nav>
+
+        <!-- Button -->
+        <button class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
+            Order Now
+        </button>
+    </div>
+</header>
+
+
+<!-- ================= HERO ================= -->
+<section class="py-16">
+    <div class="container mx-auto px-6 grid md:grid-cols-2 items-center gap-10">
+
+        <!-- TEXT -->
+        <div>
+            <p class="text-orange-500 font-semibold mb-2">Welcome to</p>
+
+            <h1 class="text-6xl md:text-7xl">
+    Fast Bites <br>
+    Enjoy 
+    <span class="bg-gradient-to-r from-orange-400 to-orange-600 text-transparent bg-clip-text">
+        Your Food
+    </span>
+</h1>
+
+            <p class="text-gray-500 mt-4">
+                Delicious meals, refreshing drinks, and sweet desserts delivered fast to your door.
+            </p>
+
+            <div class="mt-6 flex gap-4">
+                <button class="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition">
+    Order Now
+</button>
             </div>
+        </div>
 
-            <div class="hero-card">
-                <div class="eyebrow">Your city, your cravings · delivered</div>
-                <h1>Fast food that moves at your speed.</h1>
-                <p class="subhead">
-                    Discover top local restaurants, track riders live, and get meals in under 30 minutes with FastBites—built for the way you actually eat.
-                </p>
-                <div class="cta-stack">
-    <a class="glass-btn primary" href="{{ route('login') }}">Login</a>
-    <a class="glass-btn primary" href="{{ route('register') }}">Sign Up</a>
-    <a class="glass-btn primary" href="{{ url('/dashboard') }}">Go to Dashboard</a>
+    <div class="relative flex justify-center items-center">
+
+    <!-- Glow خلفي -->
+    <div class="absolute w-[420px] h-[420px] bg-orange-300 opacity-20 blur-3xl rounded-full"></div>
+
+    <!-- Circle -->
+    <div class="circle-bg w-[380px] h-[380px] relative flex items-center justify-center">
+
+        <!-- Pizza -->
+        <img src="{{ asset('images/pizza.png') }}"
+             class="absolute w-[420px] float rotate-[-5deg] hover:rotate-0 hover:scale-140 transition duration-500 drop-shadow-2xl">
+
+    </div>
+
 </div>
 
-                <div class="features">
-                    <div class="feature-card">
-                        <div class="feature-icon">⏱️</div>
-                        <div>
-                            <div class="feature-title">15–30 min avg ETA</div>
-                            <div class="feature-copy">Predictive dispatch keeps your cravings on schedule.</div>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🍔</div>
-                        <div>
-                            <div class="feature-title">Curated picks</div>
-                            <div class="feature-copy">Hand-picked burgers, bowls, and bites from local legends.</div>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📍</div>
-                        <div>
-                            <div class="feature-title">Live tracking</div>
-                            <div class="feature-copy">Follow your courier with real-time updates and smart alerts.</div>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">💳</div>
-                        <div>
-                            <div class="feature-title">Secure checkout</div>
-                            <div class="feature-copy">Encrypted payments with Apple Pay, cards, and cashless tips.</div>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🌟</div>
-                        <div>
-                            <div class="feature-title">Trust at a glance</div>
-                            <div class="feature-copy">Ratings, photos, and chef notes keep choices effortless.</div>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <div>
-                            <div class="feature-title">Always-on support</div>
-                            <div class="feature-copy">Chat with support right inside the app when you need help.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+</div>
+    </div>
+</section>
 
-        <div class="footer">
-            &copy; {{ date('Y') }} FastBites. Delivering happiness, one meal at a time.
+
+<!-- ================= POPULAR DISHES ================= -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Our Popular <span class="text-orange-500">Dishes</span>
+        </h2>
+
+<div class="grid md:grid-cols-4 gap-6 mt-4">
+            <!-- Card -->
+             <div class="fade-in" style="transition-delay: 0.1s">
+            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
+                <img src="{{ asset('images/shawarma.jpg') }}"
+                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+                <h3 class="font-semibold">Shawarma</h3>
+                <p class="text-orange-500 font-bold">$10</p>
+            </div>
+        </div>
+
+
+            <div class="fade-in" style="transition-delay: 0.1s">
+            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
+                <img src="{{ asset('images/salad.jpg') }}"
+                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+                <h3 class="font-semibold">Avocado Salad</h3>
+                <p class="text-orange-500 font-bold">$6</p>
+            </div></div>
+
+
+            <div class="fade-in" style="transition-delay: 0.1s">
+            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
+                <img src="{{ asset('images/dessert6.jpg') }}"
+                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+                <h3 class="font-semibold">Orange Cake</h3>
+                <p class="text-orange-500 font-bold">$7</p>
+            </div>
+            </div>
+
+            <div class="fade-in" style="transition-delay: 0.1s">
+            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
+                <img src="{{ asset('images/smoothie3.jpg') }}"
+                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
+                <h3 class="font-semibold">Fruit Mix</h3>
+                <p class="text-orange-500 font-bold">$5</p>
+            </div>
+
         </div>
     </div>
+</section>
+
+   <!-- SLIDER -->
+<div class="relative w-full h-[500px] overflow-hidden">
+
+    <div id="slider" class="flex transition-transform duration-700">
+
+        <!-- Slide 1 -->
+        <div class="w-full h-[500px] flex-shrink-0 relative">
+            <img src="{{ asset('images/delivery.jpg') }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
+                <h1 class="text-5xl font-bold mb-4">Fast Delivery</h1>
+                <p class="mb-6">Fresh & Hot, delivered fast</p>
+                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="w-full h-[500px] flex-shrink-0 relative">
+            <img src="{{ asset('images/sweet.jpg') }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
+                <h1 class="text-5xl font-bold mb-4">Sweet Desserts</h1>
+                <p class="mb-6">Cold & tasty treats</p>
+                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="w-full h-[500px] flex-shrink-0 relative">
+            <img src="{{ asset('images/drinks.jpg') }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
+                <h1 class="text-5xl font-bold mb-4">Refreshing Drinks</h1>
+                <p class="mb-6">Stay cool with our smoothies</p>
+                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<section class="py-16 bg-[#FFF7ED] text-center">
+
+    <h2 class="text-3xl font-bold mb-10">Why Choose Us</h2>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold mb-2">⚡ Fast Delivery</h3>
+            <p>Get your food delivered hot and fresh in minutes.</p>
+        </div>
+
+        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold mb-2">🍔 Quality Food</h3>
+            <p>We use the best ingredients for maximum taste.</p>
+        </div>
+
+        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold mb-2">🥤 Variety</h3>
+            <p>Food, desserts, and drinks all in one place.</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="py-16 text-center">
+
+    <h2 class="text-3xl font-bold mb-10">Categories</h2>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+        <div class="relative group">
+            <img src="{{ asset('images/burger.png') }}" class="mx-auto h-40 object-contain">
+            <h3 class="mt-4 text-xl font-semibold">Food</h3>
+        </div>
+
+        <div class="relative group">
+            <img src="{{ asset('images/dessert4.png') }}" class="mx-auto h-40 object-contain">
+            <h3 class="mt-4 text-xl font-semibold">Desserts</h3>
+        </div>
+
+        <div class="relative group">
+            <img src="{{ asset('images/smoothie1.png') }}" class="mx-auto h-40 object-contain">
+            <h3 class="mt-4 text-xl font-semibold">Drinks</h3>
+        </div>
+
+    </div>
+
+</section>
+<section class="py-16 py-16 text-center text-center">
+
+    <h2 class="text-3xl font-bold mb-10">What Our Customers Say</h2>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
+            <p class="mb-4">"Best burger I’ve ever had! Super fast delivery."</p>
+            <h4 class="font-semibold">— Sarah</h4>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
+            <p class="mb-4">"Desserts are amazing and very fresh!"</p>
+            <h4 class="font-semibold">— Ahmed</h4>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
+            <p class="mb-4">"Love the smoothies, highly recommended!"</p>
+            <h4 class="font-semibold">— Lina</h4>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-orange-500 text-white py-10">
+    <div class="container mx-auto px-6 text-center">
+
+        <h2 class="text-2xl font-bold mb-3">Fast Bites</h2>
+
+        <p class="text-sm opacity-90">
+            Delicious food delivered fast. Fast Food, drinks, and desserts all in one place.
+        </p>
+
+        <div class="mt-4 flex justify-center gap-6">
+            <a href="#" class="hover:underline">Privacy</a>
+            <a href="#" class="hover:underline">Terms</a>
+            <a href="#" class="hover:underline">Contact</a>
+        </div>
+
+        <p class="mt-6 text-sm opacity-80">
+            © 2026 Fast Bites. All rights reserved.
+        </p>
+
+    </div>
+</footer>
+
+<script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>

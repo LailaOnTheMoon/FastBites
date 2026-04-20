@@ -1,0 +1,38 @@
+/* ========== GLOBAL ========== */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+/* ========== CIRCLE ========== */
+.circle-bg {
+    border: 2px dashed rgba(255, 140, 0, 0.4);
+    border-radius: 50%;
+}
+
+/* ========== ANIMATION ========== */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* ========== FADE IN ========== */
+.fade-in {
+    opacity: 1;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
