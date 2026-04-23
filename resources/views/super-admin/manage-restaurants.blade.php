@@ -1,17 +1,8 @@
 @extends('layouts.super-admin')
 
-@section('title', 'Super Admin Restaurants')
+@section('title', 'Manage Restaurants')
 
 @section('content')
-    @php
-        $restaurants = [
-            ['name' => 'Downtown Branch', 'region' => 'Capital', 'manager' => 'Layla Sami', 'status' => 'Active', 'health' => 'Stable'],
-            ['name' => 'Airport Hub', 'region' => 'East', 'manager' => 'Rami Adel', 'status' => 'Active', 'health' => 'Busy'],
-            ['name' => 'Sea View', 'region' => 'West', 'manager' => 'Hana Qasem', 'status' => 'Launch Prep', 'health' => 'Setup'],
-            ['name' => 'Old Market', 'region' => 'North', 'manager' => 'Yara Tareq', 'status' => 'Paused', 'health' => 'Review'],
-        ];
-    @endphp
-
     <header class="topbar">
         <div class="topbar-copy">
             <h1>Manage Restaurants</h1>
@@ -23,30 +14,39 @@
         <div class="panel-header panel-header-stack">
             <div>
                 <h3>Restaurant Registry</h3>
-                <p>Static list prepared for the platform management area.</p>
+                <p>Dynamic list prepared for the platform management area.</p>
             </div>
         </div>
+
         <div class="table-wrap">
             <table class="orders-table">
                 <thead>
                     <tr>
                         <th>Restaurant</th>
-                        <th>Region</th>
+                        <th>City</th>
                         <th>Manager</th>
                         <th>Status</th>
-                        <th>Health</th>
+                        <th>Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($restaurants as $restaurant)
+                    @forelse ($restaurants as $restaurant)
                         <tr>
-                            <td>{{ $restaurant['name'] }}</td>
-                            <td>{{ $restaurant['region'] }}</td>
-                            <td>{{ $restaurant['manager'] }}</td>
-                            <td><span class="status-pill {{ $restaurant['status'] === 'Active' ? 'delivered' : 'pending' }}">{{ $restaurant['status'] }}</span></td>
-                            <td>{{ $restaurant['health'] }}</td>
+                            <td>{{ $restaurant->name }}</td>
+                            <td>{{ $restaurant->city }}</td>
+                            <td>{{ trim(($restaurant->manager_first_name ?? '') . ' ' . ($restaurant->manager_last_name ?? '')) ?: 'N/A' }}</td>
+                            <td>
+                                <span class="status-pill {{ $restaurant->is_active ? 'delivered' : 'pending' }}">
+                                    {{ $restaurant->is_active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td>{{ $restaurant->address_line_1 }}</td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5">No restaurants found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

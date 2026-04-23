@@ -3,15 +3,6 @@
 @section('title', 'Completed Orders')
 
 @section('content')
-    @php
-        $orders = [
-            ['ticket' => 'KT-2050', 'customer' => 'Huda Ali', 'handoff' => 'Delivery', 'completed' => '09:55 AM', 'duration' => '18 min'],
-            ['ticket' => 'KT-2051', 'customer' => 'Karim Nader', 'handoff' => 'Pickup', 'completed' => '10:02 AM', 'duration' => '14 min'],
-            ['ticket' => 'KT-2052', 'customer' => 'Raghad Fadi', 'handoff' => 'Delivery', 'completed' => '10:09 AM', 'duration' => '20 min'],
-            ['ticket' => 'KT-2053', 'customer' => 'Nour Hatem', 'handoff' => 'Pickup', 'completed' => '10:16 AM', 'duration' => '13 min'],
-        ];
-    @endphp
-
     <header class="topbar">
         <div class="topbar-copy">
             <h1>Completed Orders</h1>
@@ -23,32 +14,43 @@
         <div class="panel-header panel-header-stack">
             <div>
                 <h3>Completed Queue</h3>
-                <p>Static archive-style table for finished orders.</p>
+                <p>{{ $orders->count() }} finished kitchen orders.</p>
             </div>
         </div>
+
         <div class="table-wrap">
             <table class="orders-table">
                 <thead>
                     <tr>
                         <th>Ticket</th>
                         <th>Customer</th>
+                        <th>Restaurant</th>
                         <th>Handoff</th>
                         <th>Completed At</th>
-                        <th>Total Duration</th>
+                        <th>Total Amount</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($orders as $order)
+                    @forelse ($orders as $order)
                         <tr>
-                            <td>{{ $order['ticket'] }}</td>
-                            <td>{{ $order['customer'] }}</td>
-                            <td>{{ $order['handoff'] }}</td>
-                            <td>{{ $order['completed'] }}</td>
-                            <td>{{ $order['duration'] }}</td>
-                            <td><span class="status-pill delivered">Completed</span></td>
+                            <td>{{ $order->order_number }}</td>
+                            <td>{{ $order->customer_name }}</td>
+                            <td>{{ $order->restaurant_name }}</td>
+                            <td>{{ ucfirst($order->order_type) }}</td>
+                            <td>
+                                {{ $order->delivered_at ? \Carbon\Carbon::parse($order->delivered_at)->format('h:i A') : \Carbon\Carbon::parse($order->created_at)->format('h:i A') }}
+                            </td>
+                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                            <td>
+                                <span class="status-pill delivered">Completed</span>
+                            </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7">No completed orders found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

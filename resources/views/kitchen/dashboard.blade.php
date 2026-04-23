@@ -1,17 +1,8 @@
 @extends('layouts.kitchen')
 
-@section('title', 'FastBites Kitchen Dashboard')
+@section('title', 'Kitchen Dashboard')
 
 @section('content')
-    @php
-        $stats = [
-            ['value' => '18', 'label' => 'New Orders'],
-            ['value' => '11', 'label' => 'Preparing'],
-            ['value' => '9', 'label' => 'Ready'],
-            ['value' => '42', 'label' => 'Completed Today'],
-        ];
-    @endphp
-
     <header class="topbar">
         <div class="topbar-copy">
             <h1>Kitchen Dashboard</h1>
@@ -20,14 +11,33 @@
     </header>
 
     <section class="stats-grid">
-        @foreach ($stats as $stat)
-            <article class="stat-card">
-                <div class="stat-copy">
-                    <h2>{{ $stat['value'] }}</h2>
-                    <p>{{ $stat['label'] }}</p>
-                </div>
-            </article>
-        @endforeach
+        <article class="stat-card">
+            <div class="stat-copy">
+                <h2>{{ $newOrdersCount }}</h2>
+                <p>New Orders</p>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-copy">
+                <h2>{{ $preparingCount }}</h2>
+                <p>Preparing</p>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-copy">
+                <h2>{{ $readyCount }}</h2>
+                <p>Ready</p>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-copy">
+                <h2>{{ $completedTodayCount }}</h2>
+                <p>Completed Today</p>
+            </div>
+        </article>
     </section>
 
     <section class="dashboard-grid">
@@ -38,11 +48,27 @@
                     <p>Quick view of what the kitchen team should focus on now.</p>
                 </div>
             </div>
+
             <div class="summary-row">
-                <div class="summary-card"><strong>5 orders</strong><span>Need prep start in the next 10 minutes</span></div>
-                <div class="summary-card"><strong>3 stations</strong><span>Running at full capacity</span></div>
-                <div class="summary-card"><strong>2 alerts</strong><span>Special instructions waiting confirmation</span></div>
-                <div class="summary-card"><strong>14 min</strong><span>Average prep duration</span></div>
+                <div class="summary-card">
+                    <strong>{{ $priorityOrders }} orders</strong>
+                    <span>Need prep start in the next 10 minutes</span>
+                </div>
+
+                <div class="summary-card">
+                    <strong>{{ $restaurantsRunning }} stations</strong>
+                    <span>Running at full capacity</span>
+                </div>
+
+                <div class="summary-card">
+                    <strong>{{ $specialInstructionAlerts }} alerts</strong>
+                    <span>Special instructions waiting confirmation</span>
+                </div>
+
+                <div class="summary-card">
+                    <strong>{{ $averagePrepDuration }} min</strong>
+                    <span>Average prep duration</span>
+                </div>
             </div>
         </article>
 
@@ -53,6 +79,7 @@
                     <p>Open the order stage pages from here.</p>
                 </div>
             </div>
+
             <ul class="status-legend">
                 <li><span class="legend-dot orange"></span><a href="{{ route('kitchen.new-orders') }}">New Orders</a></li>
                 <li><span class="legend-dot amber"></span><a href="{{ route('kitchen.preparing-orders') }}">Preparing Orders</a></li>
@@ -68,10 +95,11 @@
                     <p>Shift reminders for the current team.</p>
                 </div>
             </div>
+
             <ul class="status-legend">
-                <li><span class="legend-dot orange"></span>Prioritize delivery batches due within 15 minutes.</li>
-                <li><span class="legend-dot amber"></span>Flag missing items before moving an order to ready.</li>
-                <li><span class="legend-dot yellow"></span>Keep completed queue updated for handoff accuracy.</li>
+                <li><span class="legend-dot orange"></span>{{ $priorityOrders }} orders need immediate attention.</li>
+                <li><span class="legend-dot amber"></span>{{ $specialInstructionAlerts }} orders have special instructions.</li>
+                <li><span class="legend-dot yellow"></span>{{ $readyCount }} orders are waiting for pickup or delivery handoff.</li>
             </ul>
         </article>
     </section>
