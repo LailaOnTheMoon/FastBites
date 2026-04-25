@@ -1,18 +1,68 @@
-let currentIndex = 0;
 const slider = document.getElementById('slider');
 
-if (slider) {
-    const totalSlides = slider.children.length;
+const sliderSlides = [
+    {
+        image: '/images/delivery.jpg',
+        title: 'Fast Delivery',
+        text: 'Fresh & Hot, delivered fast',
+        buttonText: 'Order Now',
+    },
+    {
+        image: '/images/sweet.jpg',
+        title: 'Sweet Desserts',
+        text: 'Cold & tasty treats',
+        buttonText: 'Order Now',
+    },
+    {
+        image: '/images/drinks.jpg',
+        title: 'Refreshing Drinks',
+        text: 'Stay cool with our smoothies',
+        buttonText: 'Order Now',
+    },
+];
 
-    function updateSlide() {
-        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+let currentIndex = 0;
+
+function createSlide(slide) {
+    const slideElement = document.createElement('div');
+    slideElement.className = 'w-full h-[500px] flex-shrink-0 relative';
+    slideElement.innerHTML = `
+        <img src="${slide.image}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
+            <h1 class="text-5xl font-bold mb-4">${slide.title}</h1>
+            <p class="mb-6">${slide.text}</p>
+            <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">${slide.buttonText}</button>
+        </div>
+    `;
+    return slideElement;
+}
+
+function renderSlides() {
+    if (!slider) {
+        return;
     }
 
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalSlides;
-        updateSlide();
+    slider.innerHTML = '';
+    sliderSlides.forEach(slide => {
+        slider.appendChild(createSlide(slide));
+    });
+}
+
+function updateSlide() {
+    if (!slider) {
+        return;
     }
 
+    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+}
+
+function nextSlide() {
+    currentIndex = (currentIndex + 1) % sliderSlides.length;
+    updateSlide();
+}
+
+if (slider && sliderSlides.length) {
+    renderSlides();
     setInterval(nextSlide, 3000);
 }
 

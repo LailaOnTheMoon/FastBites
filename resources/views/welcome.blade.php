@@ -166,39 +166,7 @@
    <!-- SLIDER -->
 <div class="relative w-full h-[500px] overflow-hidden">
 
-    <div id="slider" class="flex transition-transform duration-700">
-
-        <!-- Slide 1 -->
-        <div class="w-full h-[500px] flex-shrink-0 relative">
-            <img src="{{ asset('images/delivery.jpg') }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
-                <h1 class="text-5xl font-bold mb-4">Fast Delivery</h1>
-                <p class="mb-6">Fresh & Hot, delivered fast</p>
-                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
-            </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="w-full h-[500px] flex-shrink-0 relative">
-            <img src="{{ asset('images/sweet.jpg') }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
-                <h1 class="text-5xl font-bold mb-4">Sweet Desserts</h1>
-                <p class="mb-6">Cold & tasty treats</p>
-                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
-            </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="w-full h-[500px] flex-shrink-0 relative">
-            <img src="{{ asset('images/drinks.jpg') }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
-                <h1 class="text-5xl font-bold mb-4">Refreshing Drinks</h1>
-                <p class="mb-6">Stay cool with our smoothies</p>
-                <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">Order Now</button>
-            </div>
-        </div>
-
-    </div>
+    <div id="slider" class="flex transition-transform duration-700"></div>
 
 </div>
 
@@ -299,6 +267,6 @@
     </div>
 </footer>
 
-<script src="{{ asset('js/main.js') }}"></script>
+@vite(['resources/js/app.js'])
 </body>
 </html>
