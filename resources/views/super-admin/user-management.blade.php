@@ -15,14 +15,15 @@
             <div class="panel-header">
                 <div>
                     <h3>User Segments</h3>
-                    <p>Static segmentation blocks for the super admin view.</p>
+                    <p>Dynamic segmentation blocks for the super admin view.</p>
                 </div>
             </div>
+
             <div class="summary-row">
-                <div class="summary-card"><strong>18,420</strong><span>Customers</span></div>
-                <div class="summary-card"><strong>126</strong><span>Restaurant accounts</span></div>
-                <div class="summary-card"><strong>58</strong><span>Admin accounts</span></div>
-                <div class="summary-card"><strong>34</strong><span>Support agents</span></div>
+                <div class="summary-card"><strong>{{ $customersCount }}</strong><span>Customers</span></div>
+                <div class="summary-card"><strong>{{ $restaurantAccounts }}</strong><span>Restaurant accounts</span></div>
+                <div class="summary-card"><strong>{{ $adminAccounts }}</strong><span>Admin accounts</span></div>
+                <div class="summary-card"><strong>{{ $supportAgents }}</strong><span>Support agents</span></div>
             </div>
         </article>
 
@@ -30,13 +31,14 @@
             <div class="panel-header">
                 <div>
                     <h3>Moderation Queue</h3>
-                    <p>Static list of account review categories.</p>
+                    <p>Dynamic list of account review categories.</p>
                 </div>
             </div>
+
             <ul class="status-legend">
-                <li><span class="legend-dot orange"></span>12 profile verification issues waiting review.</li>
-                <li><span class="legend-dot amber"></span>07 duplicate-account checks in progress.</li>
-                <li><span class="legend-dot yellow"></span>04 privilege escalation requests pending.</li>
+                <li><span class="legend-dot orange"></span>{{ $missingPhoneCustomers }} customer accounts missing phone number.</li>
+                <li><span class="legend-dot amber"></span>{{ $duplicateEmails }} duplicate customer email groups found.</li>
+                <li><span class="legend-dot yellow"></span>{{ $supportAgents }} support-related employee accounts active.</li>
             </ul>
         </article>
 
@@ -47,6 +49,7 @@
                     <p>Prepared summary cards for future controls.</p>
                 </div>
             </div>
+
             <div class="summary-row">
                 <div class="summary-card"><strong>2FA</strong><span>Required for admin roles</span></div>
                 <div class="summary-card"><strong>Session Rules</strong><span>24-hour timeout</span></div>

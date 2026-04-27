@@ -10,11 +10,15 @@ use Illuminate\Support\Facades\Hash;
 class EmployeeController extends Controller
 {
     public function index()
-    {
-        $employees = User::all(); // فقط الموظفين (users table)
+{
+    $employees = User::whereIn('account_type', [
+        'admin',
+        'kitchen_manager',
+        'user_manager',
+    ])->latest()->get();
 
-        return view('admin.manage-employees', compact('employees'));
-    }
+    return view('admin.manage-employees', compact('employees'));
+}
 
     public function create()
     {

@@ -61,5 +61,18 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('12345678'),
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'mo@fastbites.ps'],
+            [
+                'first_name' => 'mohmad',
+                'middle_name' => 'Ahmed',
+                'last_name' => 'Khan',
+                'phone_number' => '0599999222',
+                'address' => 'Tulkarm',
+                'account_type' => User::ROLE_CUSTOMER,
+                'password' => Hash::make('12345678'),
+            ]
+        );
     }
 }
