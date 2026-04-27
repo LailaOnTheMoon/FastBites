@@ -20,7 +20,9 @@
             <div>
                 <div class="brand-block">
                     <div class="sidebar-brand-row">
-                        <a href="{{ route('kitchen.dashboard') }}" class="brand-name">FastBites</a>
+                        <a href="{{ url('/') }}" class="brand-logo-link">
+    <img src="{{ asset('images/logo.png') }}" alt="FastBites Logo" class="sidebar-logo">
+</a>   
                         <button class="drawer-close-button" type="button" aria-label="Close menu">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.41L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3l6.3 6.29 6.29-6.3z" /></svg>
                         </button>

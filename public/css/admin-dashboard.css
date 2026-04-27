@@ -118,7 +118,6 @@ select {
 }
 
 .sidebar-brand-row {
-    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
@@ -950,3 +949,16 @@ tbody td {
     }
 }
 
+.sidebar-logo {
+    width: 100%;
+    max-width: 100px; /* حجم مناسب */
+    height: auto;
+    display: block;
+}
+
+.brand-logo-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
