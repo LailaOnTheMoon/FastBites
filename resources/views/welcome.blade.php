@@ -53,7 +53,6 @@
             <a href="#" class="hover:text-orange-500">Menu</a>
             <a href="#" class="hover:text-orange-500">About</a>
             <a href="#" class="hover:text-orange-500">Contact</a>
-            <a href="{{ route('login') }}" class="hover:text-orange-500">Log In</a>
         </nav>
 
         <!-- Button -->
