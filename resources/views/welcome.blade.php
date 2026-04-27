@@ -53,13 +53,12 @@
             <a href="#" class="hover:text-orange-500">Menu</a>
             <a href="#" class="hover:text-orange-500">About</a>
             <a href="#" class="hover:text-orange-500">Contact</a>
-            <a href="#" class="hover:text-orange-500">Log In</a>
-            
+            <a href="{{ route('login') }}" class="hover:text-orange-500">Log In</a>
         </nav>
 
         <!-- Button -->
         <button class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
-            Order Now
+           <a href="{{ route('login') }}">Order Now</a>
         </button>
     </div>
 </header>
@@ -85,11 +84,12 @@
                 Delicious meals, refreshing drinks, and sweet desserts delivered fast to your door.
             </p>
 
-            <div class="mt-6 flex gap-4">
-                <button class="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition">
-    Order Now
-</button>
-            </div>
+          <div class="mt-6 flex gap-4">
+    <a href="{{ route('login') }}"
+       class="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition inline-block">
+        Order Now
+    </a>
+</div>
         </div>
 
     <div class="relative flex justify-center items-center">
