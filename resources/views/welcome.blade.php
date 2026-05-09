@@ -49,10 +49,10 @@
 
         <!-- Links -->
         <nav class="hidden md:flex gap-8 text-yellow-700">
-            <a href="#" class="hover:text-orange-500">Home</a>
-            <a href="#" class="hover:text-orange-500">Menu</a>
-            <a href="#" class="hover:text-orange-500">About</a>
-            <a href="#" class="hover:text-orange-500">Contact</a>
+            <a href="/" class="hover:text-orange-500">Home</a>
+            <a href="/restaurants" class="hover:text-orange-500">Menu</a>       
+            <a href="/about" class="hover:text-orange-500">About</a>
+            <a href="/contact" class="hover:text-orange-500">Contact</a>
         </nav>
 
         <!-- Button -->
@@ -84,10 +84,10 @@
             </p>
 
           <div class="mt-6 flex gap-4">
-    <a href="{{ route('login') }}"
-       class="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition inline-block">
-        Order Now
-    </a>
+    <button class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
+                   <a href="{{ route('login') }}">Order Now</a>
+
+</button>
 </div>
         </div>
 

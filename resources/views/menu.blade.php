@@ -10,20 +10,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 </head>
+<style>
+    .total-box {
+  width: fit-content;
+  min-width: 260px;
+
+  margin: 30px auto 18px;
+
+  padding: 16px 22px;
+
+  border-radius: 18px;
+}
+
+.btn-next {
+  width: 220px;
+
+  display: block;
+
+  margin: 0 auto;
+
+  padding: 14px 18px;
+
+  border-radius: 18px;
+} </style>
 <body class="welcome-page">
     <div class="container">
         <h1 class="title">FastBites</h1>
         <p class="subtitle">Sugar Bloom Dessert Lab</p>
-
-        <div class="total-box" style="margin-bottom: 26px;">
-            <span class="total-label">Order total</span>
-            <span class="total-amount" id="orderTotalTop">$0.00</span>
-        </div>
-
         <div class="menu">
-            <div class="menu">
-
     <div class="menu-item">
         <img src="images/dessert6.jpg" alt="Orange Cake">
         <div class="menu-item-info">
@@ -73,6 +90,110 @@
         </div>
 
     </div>
+<div class="total-box" style="margin-top: 30px;">
+    <span class="total-label">Final Total</span>
+    <span class="total-amount" id="finalTotal">$0.00</span>
+</div>
 
+<button class="btn-next" onclick="goToOrderPage()">
+    Next
+</button>
+
+<script>
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+const totalElement = document.getElementById('finalTotal');
+const finalElement = document.getElementById('finalTotal');
+
+function calculateTotal() {
+
+    let total = 0;
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const quantity = item.querySelector('input[type="number"]');
+
+        const priceText = item.querySelector('.price').innerText;
+        const price = parseFloat(priceText.replace('$', ''));
+
+        if (checkbox.checked) {
+            total += price * parseInt(quantity.value);
+        }
+    });
+
+    totalElement.innerText = `$${total.toFixed(2)}`;
+}
+
+checkboxes.forEach(box => {
+    box.addEventListener('change', calculateTotal);
+});
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', calculateTotal);
+});
+</script>
+<script>
+function calculateTotal() {
+
+    let total = 0;
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const quantity = item.querySelector('input[type="number"]');
+
+        const priceText = item.querySelector('.price').innerText;
+        const price = parseFloat(priceText.replace('$', ''));
+
+        if (checkbox.checked) {
+            total += price * parseInt(quantity.value);
+        }
+    });
+
+    totalElement.innerText = `$${total.toFixed(2)}`;
+    finalElement.innerText = `$${total.toFixed(2)}`;
+}
+
+checkboxes.forEach(box => {
+    box.addEventListener('change', calculateTotal);
+});
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', calculateTotal);
+});
+
+function goToOrderPage() {
+
+    let orders = [];
+    let total = 0;
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+
+        if (checkbox.checked) {
+
+            const name = item.querySelector('.menu-item-name').innerText;
+            const quantity = item.querySelector('input[type="number"]').value;
+
+            const priceText = item.querySelector('.price').innerText;
+            const price = parseFloat(priceText.replace('$', ''));
+
+            total += price * quantity;
+
+            orders.push({
+                name: name,
+                quantity: quantity,
+                price: price
+            });
+        }
+    });
+
+    localStorage.setItem('orders', JSON.stringify(orders));
+    localStorage.setItem('total', total.toFixed(2));
+
+    window.location.href = "/orderdetailes";
+}
+</script>
 </body>
 </html>

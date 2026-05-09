@@ -15,7 +15,37 @@ use App\Http\Controllers\SuperAdminController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/restaurants', function () {
+    return view('restaurants');
+});
 
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::get('/contact', function () {
+    return view('contact');
+});
+Route::get('/menu', function () {
+    return view('menu');
+});
+
+Route::get('/menu2', function () {
+    return view('menu2');
+});
+
+Route::get('/menu3', function () {
+    return view('menu3');
+});
+Route::get('/orderdetailes', function () {
+    return view('orderdetailes');
+});
+Route::get('/payment', function () {
+    return view('payment');
+});
+Route::get('/carddetailes', function () {
+    return view('carddetailes');
+});
 Route::get('/test', [TestController::class, 'viewTest'])->name('test');
 Route::get('/updateUserTest', [TestController::class, 'updateUser'])->name('updateUserTest');
 Route::get('/createUserTest', [TestController::class, 'createUser'])->name('createUserTest');

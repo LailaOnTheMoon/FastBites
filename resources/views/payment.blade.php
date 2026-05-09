@@ -8,36 +8,69 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+            <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 </head>
-<body>
-    <div class="container">
-        <article class="login-card">
-            <header class="header">
-                <h1>FastBites</h1>
-                <p>Welcome back — sign in to continue to your dashboard.</p>
-            </header>
+<body class="welcome-page">
+<div class="container">
 
-            <form id="loginForm" autocomplete="off">
-                <h2>Premium Account Access</h2>
-                <p>Securely login with your credentials in a warm, premium interface.</p>
+    <article class="login-card">
 
-                <div class="field">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                </div>
+        <header class="header">
+            <h1>FastBites</h1>
+            <p>Select your preferred payment method to complete your order.</p>
+        </header>
 
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
+        <form id="paymentForm">
 
-                <button type="submit" class="btn-login">Log In</button>
-            </form>
-        </article>
-    </div>
+            <div class="field payment-option">
+                <label>
+                    <input type="radio" name="payment" value="cash">
+                    Cash on Delivery
+                </label>
+            </div>
 
-@vite(['resources/js/app.js'])
+            <div class="field payment-option">
+                <label>
+                    <input type="radio" name="payment" value="card">
+                    Pay with Card
+                </label>
+            </div>
+
+            <button type="button" class="btn-next" onclick="continuePayment()">
+                Next
+            </button>
+
+        </form>
+
+    </article>
+
+</div>
+
+<script>
+
+function continuePayment() {
+
+    const selected = document.querySelector('input[name="payment"]:checked');
+
+    if (!selected) {
+        alert("Please select a payment method.");
+        return;
+    }
+
+    if (selected.value === "cash") {
+
+        alert("Thank you! Your order has been placed successfully.");
+
+    } else if (selected.value === "card") {
+
+        window.location.href = "/carddetailes";
+
+    }
+}
+
+</script>
+
 </body>
 </html>

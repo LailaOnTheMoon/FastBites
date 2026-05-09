@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
 </head>
 <body class="welcome-page">
@@ -23,51 +24,50 @@
             <div class="order-meta">
                 <span>Expected in 22–28 min</span>
                 <span>Delivery: 1.2 mi</span>
-                <span>Payment: Card</span>
             </div>
 
-            <div class="order-items">
-                <div class="item">
-                    <div class="item-info">
-                        <p class="item-name">Margherita Pizza</p>
-                        <div class="item-meta">
-                            <span>Qty: 1</span>
-                            <span>Prep: 10 min</span>
-                        </div>
-                    </div>
-                    <div class="item-price">$14.99</div>
-                </div>
-
-                <div class="item">
-                    <div class="item-info">
-                        <p class="item-name">Truffle Burger</p>
-                        <div class="item-meta">
-                            <span>Qty: 1</span>
-                            <span>Prep: 12 min</span>
-                        </div>
-                    </div>
-                    <div class="item-price">$18.50</div>
-                </div>
-
-                <div class="item">
-                    <div class="item-info">
-                        <p class="item-name">Salmon Roll</p>
-                        <div class="item-meta">
-                            <span>Qty: 2</span>
-                            <span>Prep: 8 min</span>
-                        </div>
-                    </div>
-                    <div class="item-price">$24.00</div>
-                </div>
-            </div>
+            <div class="order-items" id="orderItems"></div>
 
             <div class="order-total">
-                <span>Total</span>
-                <span>$57.49</span>
+                <span id="orderTotal">$0.00</span>
             </div>
 
-            <button class="btn-next" type="button">Next</button>
-        </div>
+<button class="btn-next" onclick="goToPaymentPage()">
+    Next
+</button>
+</div>
     </div>
+    <script>
+const orders = JSON.parse(localStorage.getItem('orders')) || [];
+const total = localStorage.getItem('total') || "0.00";
+
+const container = document.getElementById('orderItems');
+
+orders.forEach(item => {
+
+    container.innerHTML += `
+        <div class="item">
+            <div class="item-info">
+                <p class="item-name">${item.name}</p>
+
+                <div class="item-meta">
+                    <span>Qty: ${item.quantity}</span>
+                </div>
+            </div>
+
+            <div class="item-price">
+                $${(item.price * item.quantity).toFixed(2)}
+            </div>
+        </div>
+    `;
+});
+
+document.getElementById('orderTotal').innerText = `$${total}`;
+</script>
+<script>
+function goToPaymentPage() {
+    window.location.href = "/payment";
+}
+</script>
 </body>
 </html>

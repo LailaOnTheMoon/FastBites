@@ -9,36 +9,157 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+      <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
     
 </head>
+ <style>
+        .payment-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(14px);
+            box-shadow: var(--shadow-strong);
+            padding: 32px;
+            max-width: 520px;
+            margin: 50px auto;
+        }
+
+        .payment-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--button-end);
+        }
+
+        .payment-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            font-weight: 600;
+        }
+
+        .field input {
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--button-start);
+            box-shadow: 0 0 0 4px rgba(242,106,33,0.12);
+        }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 15px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(
+                135deg,
+                var(--button-start),
+                var(--button-end)
+            );
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+            transition: 0.2s;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(0,0,0,0.18);
+        }
+
+        @media (max-width: 600px) {
+            .payment-card {
+                padding: 24px;
+            }
+
+            .card-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 <body class="welcome-page">
-    <div class="container">
-        <article class="login-card">
-            <header class="header">
-                <h1>FastBites</h1>
-                <p>Welcome back — sign in to continue to your dashboard.</p>
-            </header>
 
-            <form id="loginForm" autocomplete="off">
-                <h2>Premium Account Access</h2>
-                <p>Securely login with your credentials in a warm, premium interface.</p>
+    <div class="payment-card">
 
-                <div class="field">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                </div>
+        <h1 class="payment-title">Card Payment</h1>
 
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                </div>
+        <p class="payment-subtitle">
+            Enter your card details securely to complete your order.
+        </p>
 
-                <button type="submit" class="btn-login">Log In</button>
-            </form>
-        </article>
+        <form id="paymentForm">
+
+    <div class="field">
+        <label>Cardholder Name</label>
+        <input type="text" placeholder="John Doe" required>
     </div>
 
-   @vite(['resources/js/app.js'])
+    <div class="field">
+        <label>Card Number</label>
+        <input type="text" placeholder="1234 5678 9012 3456" required>
+    </div>
+
+    <div class="card-row">
+
+        <div class="field">
+            <label>Expiry Date</label>
+            <input type="text" placeholder="MM/YY" required>
+        </div>
+
+        <div class="field">
+            <label>CVV</label>
+            <input type="password" placeholder="123" required>
+        </div>
+
+    </div>
+
+    <button type="submit" class="pay-btn">
+        Pay Now
+    </button>
+
+</form>
+
+    </div>
+<script>
+document
+    .getElementById("paymentForm")
+    .addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    alert("✅ Payment successful!\n\nYour order has been placed successfully.");
+
+});
+</script>
 </body>
 </html>
