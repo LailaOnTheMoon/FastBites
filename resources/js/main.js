@@ -5,19 +5,19 @@ const sliderSlides = [
         image: '/images/delivery.jpg',
         title: 'Fast Delivery',
         text: 'Fresh & Hot, delivered fast',
-        buttonText: 'Order Now',
+       
     },
     {
         image: '/images/sweet.jpg',
         title: 'Sweet Desserts',
         text: 'Cold & tasty treats',
-        buttonText: 'Order Now',
+       
     },
     {
-        image: '/images/drinks.jpg',
+        image: '/images/drinkshop.jpg',
         title: 'Refreshing Drinks',
         text: 'Stay cool with our smoothies',
-        buttonText: 'Order Now',
+        
     },
 ];
 
@@ -30,8 +30,7 @@ function createSlide(slide) {
         <img src="${slide.image}" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-white text-center">
             <h1 class="text-5xl font-bold mb-4">${slide.title}</h1>
-            <p class="mb-6">${slide.text}</p>
-            <button class="bg-orange-500 px-6 py-2 rounded-full hover:scale-105 transition">${slide.buttonText}</button>
+        
         </div>
     `;
     return slideElement;

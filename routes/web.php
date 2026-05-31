@@ -46,6 +46,8 @@ Route::get('/payment', function () {
 Route::get('/carddetailes', function () {
     return view('carddetailes');
 });
+use App\Http\Controllers\AIController;
+Route::get('/generate-ai-message', [AIController::class, 'generateMessage']);
 Route::get('/test', [TestController::class, 'viewTest'])->name('test');
 Route::get('/updateUserTest', [TestController::class, 'updateUser'])->name('updateUserTest');
 Route::get('/createUserTest', [TestController::class, 'createUser'])->name('createUserTest');

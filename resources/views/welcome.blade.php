@@ -3,269 +3,734 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fast Bites</title>
+    <title>Fast Bites - Premium Food Delivery</title>
 
     <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Theme -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#FF8C00',
-                        secondary: '#FFD580',
-                        light: '#FFF8F0'
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF8F0;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        /* ========== NAVBAR ========== */
+        header {
+            background: white;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FF8C00;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        nav {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #FF8C00;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FF8C00;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #FF8C00 0%, #FF7A00 100%);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero-content .subtitle {
+            color: #FF8C00;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF8C00 0%, #FF7A00 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.4);
+        }
+
+        .hero-image {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .hero-image img {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 400px;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image img:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        /* ========== POPULAR DISHES SECTION ========== */
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header h2 .highlight {
+            color: #FF8C00;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .dish-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 40px rgba(255, 140, 0, 0.15);
+        }
+
+        .dish-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #FFF8F0 0%, rgba(255, 140, 0, 0.05) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .dish-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .dish-card:hover .dish-image img {
+            transform: scale(1.08);
+        }
+
+        .dish-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .dish-price {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #FF8C00;
+        }
+
+        /* ========== FEATURES SECTION ========== */
+        .features-section {
+            background: linear-gradient(135deg, #FFF8F0 0%, rgba(255, 140, 0, 0.05) 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(255, 140, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ========== CATEGORIES SECTION ========== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF7A00 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(255, 140, 0, 0.15);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .category-image img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .category-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        /* ========== TESTIMONIALS SECTION ========== */
+        .testimonials-section {
+            background: linear-gradient(135deg, #FFF8F0 0%, rgba(255, 140, 0, 0.05) 100%);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #FF8C00;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(255, 140, 0, 0.15);
+        }
+
+        .testimonial-text {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .rating {
+            color: #FFD580;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #FF8C00;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #FF8C00;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
+            .section {
+                padding: 2rem 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .dishes-grid,
+            .categories-grid,
+            .features-grid,
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light font-sans">
+<body>
 
 <!-- ================= NAVBAR ================= -->
-<header class="bg-white shadow-sm">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-
-        <!-- Logo -->
-        <div class="flex items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}"
-     class="w-14 h-14 object-contain drop-shadow-md hover:scale-110 transition duration-300">
-            <h1 class="text-xl font-bold text-orange-500">Fast Bites</h1>
+<header>
+    <div class="navbar-container">
+        <div class="logo-section">
+            <img src="{{ asset('images/logo.png') }}" alt="Fast Bites Logo" class="logo-img">
+            <span class="logo-text">Fast Bites</span>
         </div>
 
-        <!-- Links -->
-        <nav class="hidden md:flex gap-8 text-yellow-700">
-            <a href="/" class="hover:text-orange-500">Home</a>
-            <a href="/restaurants" class="hover:text-orange-500">Menu</a>       
-            <a href="/about" class="hover:text-orange-500">About</a>
-            <a href="/contact" class="hover:text-orange-500">Contact</a>
+        <nav class="hidden md:flex">
+            <a href="/" class="active">Home</a>
+            <a href="/restaurants">Browse</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
         </nav>
 
-        <!-- Button -->
-        <button class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
-           <a href="{{ route('login') }}">Order Now</a>
-        </button>
+        <button class="cta-btn" onclick="window.location.href='{{ route('login') }}'">Order Now</button>
     </div>
 </header>
 
-
-<!-- ================= HERO ================= -->
-<section class="py-16">
-    <div class="container mx-auto px-6 grid md:grid-cols-2 items-center gap-10">
-
-        <!-- TEXT -->
-        <div>
-            <p class="text-orange-500 font-semibold mb-2">Welcome to</p>
-
-            <h1 class="text-6xl md:text-7xl">
-    Fast Bites <br>
-    Enjoy 
-    <span class="bg-gradient-to-r from-orange-400 to-orange-600 text-transparent bg-clip-text">
-        Your Food
-    </span>
-</h1>
-
-            <p class="text-gray-500 mt-4">
-                Delicious meals, refreshing drinks, and sweet desserts delivered fast to your door.
-            </p>
-
-          <div class="mt-6 flex gap-4">
-    <button class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
-                   <a href="{{ route('login') }}">Order Now</a>
-
-</button>
-</div>
+<!-- ================= HERO SECTION ================= -->
+<section class="hero">
+    <div class="hero-content">
+        <p class="subtitle">Welcome to</p>
+        <h1>Fast Bites <br>Enjoy <span style="background: linear-gradient(135deg, #FF8C00 0%, #FF7A00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Your Food</span></h1>
+        <p>Delicious meals, refreshing drinks, and sweet desserts delivered fast to your door. Order from top-rated restaurants in your area.</p>
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="window.location.href='{{ route('login') }}'">Order Now</button>
         </div>
-
-    <div class="relative flex justify-center items-center">
-
-    <!-- Glow خلفي -->
-    <div class="absolute w-[420px] h-[420px] bg-orange-300 opacity-20 blur-3xl rounded-full"></div>
-
-    <!-- Circle -->
-    <div class="circle-bg w-[380px] h-[380px] relative flex items-center justify-center">
-
-        <!-- Pizza -->
-        <img src="{{ asset('images/pizza.png') }}"
-             class="absolute w-[420px] float rotate-[-5deg] hover:rotate-0 hover:scale-140 transition duration-500 drop-shadow-2xl">
-
     </div>
 
-</div>
-
-</div>
+    <div class="hero-image">
+        <div class="glow"></div>
+        <img src="{{ asset('images/pizza.png') }}" alt="Pizza">
     </div>
 </section>
 
+<!-- ================= POPULAR DISHES SECTION ================= -->
+<section class="section">
+    <div class="section-header">
+        <h2>Our Popular <span class="highlight">Dishes</span></h2>
+    </div>
 
-<!-- ================= POPULAR DISHES ================= -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-6">
-
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">
-            Our Popular <span class="text-orange-500">Dishes</span>
-        </h2>
-
-<div class="grid md:grid-cols-4 gap-6 mt-4">
-            <!-- Card -->
-             <div class="fade-in" style="transition-delay: 0.1s">
-            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
-                <img src="{{ asset('images/shawarma.jpg') }}"
-                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
-                <h3 class="font-semibold">Shawarma</h3>
-                <p class="text-orange-500 font-bold">$10</p>
+    <div class="dishes-grid">
+        <div class="dish-card">
+            <div class="dish-image">
+                <img src="{{ asset('images/shwrma.jpg') }}" alt="Shawarma">
             </div>
+            <h3 class="dish-name">Shawarma</h3>
+            <p class="dish-price">$10.00</p>
         </div>
 
-
-            <div class="fade-in" style="transition-delay: 0.1s">
-            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
-                <img src="{{ asset('images/salad.jpg') }}"
-                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
-                <h3 class="font-semibold">Avocado Salad</h3>
-                <p class="text-orange-500 font-bold">$6</p>
-            </div></div>
-
-
-            <div class="fade-in" style="transition-delay: 0.1s">
-            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
-                <img src="{{ asset('images/dessert6.jpg') }}"
-                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
-                <h3 class="font-semibold">Orange Cake</h3>
-                <p class="text-orange-500 font-bold">$7</p>
+        <div class="dish-card">
+            <div class="dish-image">
+                <img src="{{ asset('images/salad.jpg') }}" alt="Avocado Salad">
             </div>
+            <h3 class="dish-name">Avocado Salad</h3>
+            <p class="dish-price">$8.50</p>
+        </div>
+
+        <div class="dish-card">
+            <div class="dish-image">
+                <img src="{{ asset('images/dessert6.jpg') }}" alt="Orange Cake">
             </div>
+            <h3 class="dish-name">Orange Cake</h3>
+            <p class="dish-price">$7.99</p>
+        </div>
 
-            <div class="fade-in" style="transition-delay: 0.1s">
-            <div class="bg-light p-4 rounded-xl shadow hover:shadow-lg transition shadow fade-in">
-                <img src="{{ asset('images/smoothie3.jpg') }}"
-                     class="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
-                <h3 class="font-semibold">Fruit Mix</h3>
-                <p class="text-orange-500 font-bold">$5</p>
+        <div class="dish-card">
+            <div class="dish-image">
+                <img src="{{ asset('images/smoothie3.jpg') }}" alt="Fruit Mix">
             </div>
-
+            <h3 class="dish-name">Fruit Mix Smoothie</h3>
+            <p class="dish-price">$5.99</p>
         </div>
     </div>
 </section>
 
-   <!-- SLIDER -->
-<div class="relative w-full h-[500px] overflow-hidden">
-
-    <div id="slider" class="flex transition-transform duration-700"></div>
-
-</div>
-
-<section class="py-16 bg-[#FFF7ED] text-center">
-
-    <h2 class="text-3xl font-bold mb-10">Why Choose Us</h2>
-
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <h3 class="text-xl font-semibold mb-2">⚡ Fast Delivery</h3>
-            <p>Get your food delivered hot and fresh in minutes.</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <h3 class="text-xl font-semibold mb-2">🍔 Quality Food</h3>
-            <p>We use the best ingredients for maximum taste.</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <h3 class="text-xl font-semibold mb-2">🥤 Variety</h3>
-            <p>Food, desserts, and drinks all in one place.</p>
-        </div>
-
+<!-- ================= FEATURES SECTION ================= -->
+<section class="section features-section">
+    <div class="section-header">
+        <h2>Why Choose <span class="highlight">Fast Bites</span></h2>
     </div>
 
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Fast Delivery</h3>
+            <p>Get your food delivered hot and fresh within minutes of ordering.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🍔</div>
+            <h3>Quality Food</h3>
+            <p>We partner with trusted restaurants using premium ingredients.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🥤</div>
+            <h3>Wide Variety</h3>
+            <p>Food, desserts, and drinks all in one convenient platform.</p>
+        </div>
+    </div>
 </section>
-<section class="py-16 text-center">
 
-    <h2 class="text-3xl font-bold mb-10">Categories</h2>
-
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-        <div class="relative group">
-            <img src="{{ asset('images/burger.png') }}" class="mx-auto h-40 object-contain">
-            <h3 class="mt-4 text-xl font-semibold">Food</h3>
-        </div>
-
-        <div class="relative group">
-            <img src="{{ asset('images/dessert4.png') }}" class="mx-auto h-40 object-contain">
-            <h3 class="mt-4 text-xl font-semibold">Desserts</h3>
-        </div>
-
-        <div class="relative group">
-            <img src="{{ asset('images/smoothie1.png') }}" class="mx-auto h-40 object-contain">
-            <h3 class="mt-4 text-xl font-semibold">Drinks</h3>
-        </div>
-
+<!-- ================= CATEGORIES SECTION ================= -->
+<section class="section">
+    <div class="section-header">
+        <h2>Browse by <span class="highlight">Category</span></h2>
     </div>
 
+    <div class="categories-grid">
+        <div class="category-card">
+            <div class="category-image">
+                <img src="{{ asset('images/burger.png') }}" alt="Food">
+            </div>
+            <h3>Food & Meals</h3>
+        </div>
+
+        <div class="category-card">
+            <div class="category-image">
+                <img src="{{ asset('images/dessert4.png') }}" alt="Desserts">
+            </div>
+            <h3>Desserts</h3>
+        </div>
+
+        <div class="category-card">
+            <div class="category-image">
+                <img src="{{ asset('images/smoothie1.png') }}" alt="Drinks">
+            </div>
+            <h3>Drinks & Beverages</h3>
+        </div>
+    </div>
 </section>
-<section class="py-16 py-16 text-center text-center">
 
-    <h2 class="text-3xl font-bold mb-10">What Our Customers Say</h2>
-
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
-            <p class="mb-4">"Best burger I’ve ever had! Super fast delivery."</p>
-            <h4 class="font-semibold">— Sarah</h4>
-        </div>
-
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
-            <p class="mb-4">"Desserts are amazing and very fresh!"</p>
-            <h4 class="font-semibold">— Ahmed</h4>
-        </div>
-
-        <div class="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition">
-            <p class="mb-4">"Love the smoothies, highly recommended!"</p>
-            <h4 class="font-semibold">— Lina</h4>
-        </div>
-
+<!-- ================= TESTIMONIALS SECTION ================= -->
+<section class="section testimonials-section">
+    <div class="section-header">
+        <h2>What Our <span class="highlight">Customers Say</span></h2>
     </div>
 
-</section>
+    <div class="testimonial-grid">
+        <div class="testimonial-card">
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">"Best burger I've ever had! Super fast delivery and excellent customer service. Highly recommended!"</p>
+            <div class="testimonial-author">— Sarah M.</div>
+        </div>
 
+        <div class="testimonial-card">
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">"Desserts are absolutely amazing and very fresh! The whole experience from ordering to delivery was seamless."</p>
+            <div class="testimonial-author">— Ahmed K.</div>
+        </div>
+
+        <div class="testimonial-card">
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">"Love the smoothies! The variety of options is incredible and the quality is consistently excellent."</p>
+            <div class="testimonial-author">— Lina R.</div>
+        </div>
+    </div>
+</section>
 
 <!-- ================= FOOTER ================= -->
-<footer class="bg-orange-500 text-white py-10">
-    <div class="container mx-auto px-6 text-center">
-
-        <h2 class="text-2xl font-bold mb-3">Fast Bites</h2>
-
-        <p class="text-sm opacity-90">
-            Delicious food delivered fast. Fast Food, drinks, and desserts all in one place.
-        </p>
-
-        <div class="mt-4 flex justify-center gap-6">
-            <a href="#" class="hover:underline">Privacy</a>
-            <a href="#" class="hover:underline">Terms</a>
-            <a href="#" class="hover:underline">Contact</a>
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Fast Bites</h3>
+            <p>Delicious food delivered fast. Your favorite restaurants, one app away.</p>
         </div>
 
-        <p class="mt-6 text-sm opacity-80">
-            © 2026 Fast Bites. All rights reserved.
-        </p>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="/">Home</a>
+            <a href="/restaurants">Browse Restaurants</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact</a>
+        </div>
 
+        <div class="footer-section">
+            <h3>Support</h3>
+            <a href="#">FAQ</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Help Center</a>
+        </div>
+
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <p>Email: info@fastbites.com</p>
+            <p>Phone: +1 (555) 123-4567</p>
+            <p>Available 24/7</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Fast Bites. All rights reserved. | Crafted for food lovers.</p>
     </div>
 </footer>
 
-@vite(['resources/js/app.js'])
 </body>
 </html>
