@@ -543,11 +543,17 @@
         </div>
 
         <nav class="hidden md:flex">
-            <a href="/" class="active">Home</a>
-            <a href="/restaurants">Browse</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-        </nav>
+    <a href="/" class="active">Home</a>
+
+    @auth
+        <a href="/restaurants">Browse</a>
+    @else
+        <a href="/login">Browse</a>
+    @endauth
+
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+</nav>
 
         <button class="cta-btn" onclick="window.location.href='{{ route('login') }}'">Order Now</button>
     </div>

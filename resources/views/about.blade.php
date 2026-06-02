@@ -36,24 +36,51 @@
 </head>
 <body class="bg-light font-sans">
 
-<header class="bg-white shadow-sm">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}" class="w-14 h-14 object-contain drop-shadow-md hover:scale-110 transition duration-300">
-            <h1 class="text-xl font-bold text-orange-500">Fast Bites</h1>
+<!-- ================= NAVBAR ================= -->
+<header style="background: white; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); position: sticky; top: 0; z-index: 50;">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="{{ asset('images/logo.png') }}" alt="Fast Bites Logo"
+                 style="width: 48px; height: 48px; object-fit: contain;">
+            <span style="font-size: 1.5rem; font-weight: 700; color: #FF8C00; font-family: 'Poppins', sans-serif;">
+                Fast Bites
+            </span>
         </div>
 
-        <nav class="hidden md:flex gap-8 text-yellow-700">
-            <a href="/" class="hover:text-orange-500">Home</a>
-            <a href="/restaurants" class="hover:text-orange-500">Menu</a>
-            <a href="/about" class="text-orange-500 font-semibold">About</a>
-            <a href="/contact" class="hover:text-orange-500">Contact</a>
+        <nav class="hidden md:flex" style="gap: 3rem; align-items: center;">
+            <a href="/" style="text-decoration:none; color:#555; font-weight:500;">Home</a>
+
+            @auth
+                <a href="/restaurants" style="text-decoration:none; color:#555; font-weight:500;">Browse</a>
+            @else
+                <a href="/login" style="text-decoration:none; color:#555; font-weight:500;">Browse</a>
+            @endauth
+
+            <a href="/about" style="text-decoration:none; color:#FF8C00; font-weight:500; border-bottom:2px solid #FF8C00; padding-bottom:4px;">About</a>
+
+            <a href="/contact"
+               style="text-decoration:none; color:#555; font-weight:500;">
+                Contact
+            </a>
         </nav>
 
-        <a href="{{ route('login') }}" class="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">Order Now</a>
+        <button onclick="window.location.href='{{ route('login') }}'"
+                style="background: linear-gradient(135deg, #FF8C00 0%, #FF7A00 100%);
+                       color: white;
+                       padding: 0.75rem 1.75rem;
+                       border-radius: 50px;
+                       text-decoration: none;
+                       font-weight: 600;
+                       font-size: 0.9rem;
+                       border: none;
+                       cursor: pointer;
+                       box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);">
+            Order Now
+        </button>
+
     </div>
 </header>
-
 <main>
     <section class="py-20">
         <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
