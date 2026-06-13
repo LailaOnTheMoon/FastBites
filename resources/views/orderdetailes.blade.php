@@ -432,7 +432,7 @@
             </div>
             <div class="meta-item">
                 <span class="meta-label">Delivery Distance</span>
-                <span class="meta-value" id="deliveryDistance">1.2 mi away</span>
+                <span class="meta-value" id="deliveryDistance">0 km away</span>
             </div>
         </div>
 
@@ -451,7 +451,7 @@
             <div>
                 <div class="total-label">Order Total</div>
             </div>
-            <div class="total-amount" id="orderTotal">$0.00</div>
+            <div class="total-amount" id="orderTotal">₪0.00</div>
         </div>
 
         <!-- Action Buttons -->
@@ -467,83 +467,84 @@
 </div>
 
 <script>
-    // Load orders from localStorage
+    // ===== DATA RETRIEVAL & VALIDATION =====
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
-    console.log(orders);
-    const total = localStorage.getItem('total') || "0.00";
+    const storedTotal = localStorage.getItem('total');
+    const totalValue = parseFloat(storedTotal) || 0;
 
     const container = document.getElementById('orderItems');
 
-    // Clear loading state
-    container.innerHTML = '';
+    // ===== POPULATE ORDER ITEMS =====
+    function displayOrderItems() {
+        container.innerHTML = ''; // Clear loading state
 
-    // Populate order items
-    if (orders.length > 0) {
+        if (orders.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;">No items in order</div>';
+            return;
+        }
+
         orders.forEach(item => {
+            // Validate and extract price safely
+            const price = parseFloat(item.price) || 0;
+            const quantity = parseInt(item.quantity) || 1;
+            const itemTotal = price * quantity;
+
             const itemElement = document.createElement('div');
             itemElement.className = 'item';
             itemElement.innerHTML = `
                 <div class="item-info">
-                    <p class="item-name">${item.name}</p>
+                    <p class="item-name">${item.name || 'Unknown Item'}</p>
                     <div class="item-meta">
-                        <span>Quantity: ${item.quantity}</span>
-                        <span>Unit Price: $${parseFloat(item.price).toFixed(2)}</span>
+                        <span>Quantity: ${quantity}</span>
+                        <span>Unit Price: ₪${price.toFixed(2)}</span>
                     </div>
                 </div>
                 <div class="item-price">
-                    $${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}
+                    ₪${itemTotal.toFixed(2)}
                 </div>
             `;
             container.appendChild(itemElement);
         });
-    } else {
-        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: #999;">No items in order</div>';
     }
 
-    // Set total
-    document.getElementById('orderTotal').innerText = `$${parseFloat(total).toFixed(2)}`;
+    // ===== SET TOTAL =====
+    function displayOrderTotal() {
+        document.getElementById('orderTotal').innerText = `₪${totalValue.toFixed(2)}`;
+    }
 
-    // Calculate ETA based on order complexity
+    // ===== CALCULATE ETA =====
     function calculateETA(orders) {
         let baseTime = 10; // Base preparation time in minutes
+        let itemTypeCount = orders.length || 1;
         let totalQuantity = 0;
-        
-        // Calculate total quantity
+
         orders.forEach(item => {
-            totalQuantity += parseInt(item.quantity);
+            totalQuantity += parseInt(item.quantity) || 1;
         });
-        
-        // Add 2 minutes per item for preparation
-        let preparationTime = baseTime + (orders.length * 3);
-        
-        // Add 1 minute per quantity for cooking
-        let cookingTime = totalQuantity * 1.5;
-        
-        // Total ETA
-        let eta = Math.ceil(preparationTime + cookingTime);
-        
-        // Cap at maximum 45 minutes, minimum 10 minutes
-        return Math.max(10, Math.min(eta, 45));
+
+        // Formula: 10 + (itemTypes × 3) + (totalQuantity × 1.5), capped at 10-45 min
+        const eta = baseTime + (itemTypeCount * 3) + (totalQuantity * 1.5);
+        return Math.max(10, Math.min(45, Math.round(eta)));
     }
 
-    // Calculate delivery distance (in a real app, use geolocation or DB)
+    // ===== CALCULATE DELIVERY DISTANCE =====
     function calculateDistance(orders) {
         // Base distance + variation based on order size
         const baseDistance = 0.8;
-        const variation = (orders.length * 0.15); // 0.15 miles per item type
+        const variation = (orders.length * 0.15); // 0.15 km per item type
         const totalDistance = baseDistance + variation;
-        
+
         return parseFloat(totalDistance.toFixed(2));
     }
 
-    // Generate AI message with calculated values
+    // ===== GENERATE AI MESSAGE =====
     async function generateAIMessage() {
         const eta = calculateETA(orders);
         const distance = calculateDistance(orders);
         const status = "Preparing";
 
-        // Update display immediately
-        document.getElementById('deliveryDistance').innerText = `${distance} mi away`;
+        // Update distance display
+        document.getElementById('deliveryDistance').innerText = `${distance} km away`;
 
         try {
             const response = await fetch('/generate-ai-message', {
@@ -557,30 +558,32 @@
                     eta: eta,
                     distance: distance,
                     itemCount: orders.length,
-                    totalQuantity: orders.reduce((sum, item) => sum + parseInt(item.quantity), 0)
+                    totalQuantity: orders.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0)
                 })
             });
 
             const data = await response.json();
-            
+
             if (data.message) {
                 document.getElementById('aiMessage').innerText = data.message;
             } else {
                 document.getElementById('aiMessage').innerText = `Your order is being prepared! ETA: ${eta} minutes.`;
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching AI message:', error);
             document.getElementById('aiMessage').innerText = `Your order is being prepared! ETA: ${eta} minutes.`;
         }
     }
 
-    // Generate AI message on page load
-    generateAIMessage();
-
-    // Navigation function
+    // ===== NAVIGATION =====
     function goToPaymentPage() {
         window.location.href = "/payment";
     }
+
+    // ===== INITIALIZE PAGE =====
+    displayOrderItems();
+    displayOrderTotal();
+    generateAIMessage();
 </script>
 </body>
 </html>

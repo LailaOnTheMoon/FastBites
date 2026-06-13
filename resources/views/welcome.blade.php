@@ -544,12 +544,14 @@
 
         <nav class="hidden md:flex">
     <a href="/" class="active">Home</a>
+    <a href="/restaurants">Browse</a>
+    
 
-    @auth
+    <!-- @auth
         <a href="/restaurants">Browse</a>
     @else
         <a href="/login">Browse</a>
-    @endauth
+    @endauth -->
 
     <a href="/about">About</a>
     <a href="/contact">Contact</a>
@@ -588,7 +590,7 @@
                 <img src="{{ asset('images/shwrma.jpg') }}" alt="Shawarma">
             </div>
             <h3 class="dish-name">Shawarma</h3>
-            <p class="dish-price">$10.00</p>
+            <p class="dish-price">₪10.00</p>
         </div>
 
         <div class="dish-card">
@@ -596,7 +598,7 @@
                 <img src="{{ asset('images/salad.jpg') }}" alt="Avocado Salad">
             </div>
             <h3 class="dish-name">Avocado Salad</h3>
-            <p class="dish-price">$8.50</p>
+            <p class="dish-price">₪20</p>
         </div>
 
         <div class="dish-card">
@@ -604,7 +606,7 @@
                 <img src="{{ asset('images/dessert6.jpg') }}" alt="Orange Cake">
             </div>
             <h3 class="dish-name">Orange Cake</h3>
-            <p class="dish-price">$7.99</p>
+            <p class="dish-price">₪20</p>
         </div>
 
         <div class="dish-card">
@@ -612,7 +614,7 @@
                 <img src="{{ asset('images/smoothie3.jpg') }}" alt="Fruit Mix">
             </div>
             <h3 class="dish-name">Fruit Mix Smoothie</h3>
-            <p class="dish-price">$5.99</p>
+            <p class="dish-price">₪15</p>
         </div>
     </div>
 </section>

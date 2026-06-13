@@ -516,9 +516,9 @@
             showSuccess('✅ Payment Successful!\n\nYour order has been placed successfully. You will receive a confirmation shortly.');
             
             // Redirect after success
-            setTimeout(() => {
-                window.location.href = '/order-confirmation';
-            }, 2500);
+            // setTimeout(() => {
+            //     window.location.href = '/order-confirmation';
+            // }, 2500);
         }, 2000);
     });
 

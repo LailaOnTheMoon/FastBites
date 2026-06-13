@@ -482,7 +482,7 @@
                 <h3 class="menu-item-name">Strawberry Drink</h3>
                 <p class="menu-item-desc">Fresh blended strawberry juice with ice. A refreshing burst of natural sweetness and vibrant flavors.</p>
                 <div class="menu-item-meta">
-                    <span class="price">$4.99</span>
+                    <span class="price">₪12</span>
                     <div class="controls">
                         <div class="select-checkbox">
                             <input type="checkbox" name="selected[]" value="strawberry" id="strawberry">
@@ -490,7 +490,7 @@
                         </div>
                         <div class="quantity-control">
                             <button onclick="decrementQty(this)">−</button>
-                            <input type="number" min="1" value="1" data-price="4.99">
+                            <input type="number" min="1" value="1">
                             <button onclick="incrementQty(this)">+</button>
                         </div>
                     </div>
@@ -505,7 +505,7 @@
                 <h3 class="menu-item-name">Mango Juice</h3>
                 <p class="menu-item-desc">Sweet tropical mango fresh juice. Taste the essence of summer in every delicious glass.</p>
                 <div class="menu-item-meta">
-                    <span class="price">$4.49</span>
+                    <span class="price">₪17</span>
                     <div class="controls">
                         <div class="select-checkbox">
                             <input type="checkbox" name="selected[]" value="mango" id="mango">
@@ -513,7 +513,7 @@
                         </div>
                         <div class="quantity-control">
                             <button onclick="decrementQty(this)">−</button>
-                            <input type="number" min="1" value="1" data-price="4.49">
+                            <input type="number" min="1" value="1">
                             <button onclick="incrementQty(this)">+</button>
                         </div>
                     </div>
@@ -528,7 +528,7 @@
                 <h3 class="menu-item-name">Iced Coffee</h3>
                 <p class="menu-item-desc">Cold brewed coffee served with ice and milk. Smooth, rich, and perfectly chilled for any time of day.</p>
                 <div class="menu-item-meta">
-                    <span class="price">$3.99</span>
+                    <span class="price">₪15</span>
                     <div class="controls">
                         <div class="select-checkbox">
                             <input type="checkbox" name="selected[]" value="iced_coffee" id="iced_coffee">
@@ -536,7 +536,7 @@
                         </div>
                         <div class="quantity-control">
                             <button onclick="decrementQty(this)">−</button>
-                            <input type="number" min="1" value="1" data-price="3.99">
+                            <input type="number" min="1" value="1">
                             <button onclick="incrementQty(this)">+</button>
                         </div>
                     </div>
@@ -550,7 +550,7 @@
         <div class="total-box">
             <div class="total-box-content">
                 <span class="total-label">Final Total</span>
-                <span class="total-amount" id="finalTotal">$0.00</span>
+                <span class="total-amount" id="finalTotal">₪0.00</span>
             </div>
             <div class="item-count">
                 <span id="itemCount">0 Items</span>
@@ -574,40 +574,46 @@
     const itemCountElement = document.getElementById('itemCount');
     const nextBtn = document.getElementById('nextBtn');
 
+    // ===== INCREMENT QUANTITY =====
     function incrementQty(btn) {
         const input = btn.parentElement.querySelector('input[type="number"]');
         input.value = Math.max(1, parseInt(input.value) + 1);
         calculateTotal();
     }
 
+    // ===== DECREMENT QUANTITY =====
     function decrementQty(btn) {
         const input = btn.parentElement.querySelector('input[type="number"]');
         input.value = Math.max(1, parseInt(input.value) - 1);
         calculateTotal();
     }
 
+    // ===== CALCULATE TOTAL (FIXED) =====
     function calculateTotal() {
         let total = 0;
         let itemCount = 0;
 
         document.querySelectorAll('.menu-item').forEach(item => {
             const checkbox = item.querySelector('input[type="checkbox"]');
-            const quantity = item.querySelector('input[type="number"]');
+            const quantityInput = item.querySelector('input[type="number"]');
             const priceText = item.querySelector('.price').innerText;
-            const price = parseFloat(priceText.replace('$', ''));
+
+            // Extract price safely: remove all non-numeric characters except decimal
+            const price = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
+            const qty = parseInt(quantityInput.value) || 1;
 
             if (checkbox.checked) {
-                const qty = parseInt(quantity.value);
                 total += price * qty;
                 itemCount += qty;
             }
         });
 
-        totalElement.innerText = `$${total.toFixed(2)}`;
+        totalElement.innerText = `₪${total.toFixed(2)}`;
         itemCountElement.innerText = `${itemCount} ${itemCount === 1 ? 'Item' : 'Items'}`;
         nextBtn.disabled = itemCount === 0;
     }
 
+    // ===== EVENT LISTENERS =====
     checkboxes.forEach(box => {
         box.addEventListener('change', calculateTotal);
     });
@@ -616,6 +622,7 @@
         input.addEventListener('input', calculateTotal);
     });
 
+    // ===== GO TO ORDER PAGE =====
     function goToOrderPage() {
         let orders = [];
         let total = 0;
@@ -625,16 +632,19 @@
 
             if (checkbox.checked) {
                 const name = item.querySelector('.menu-item-name').innerText;
-                const quantity = item.querySelector('input[type="number"]').value;
+                const quantityInput = item.querySelector('input[type="number"]');
+                const quantity = parseInt(quantityInput.value) || 1;
                 const priceText = item.querySelector('.price').innerText;
-                const price = parseFloat(priceText.replace('$', ''));
+
+                // Extract price safely: remove all non-numeric characters except decimal
+                const price = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
 
                 total += price * quantity;
 
                 orders.push({
                     name: name,
                     quantity: quantity,
-                    price: price
+                    price: price // Store as pure number, no currency symbol
                 });
             }
         });

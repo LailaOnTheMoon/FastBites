@@ -21,7 +21,7 @@ class AIController extends Controller
 Order Details:
 - Status: $status
 - Estimated Delivery Time: $eta minutes
-- Delivery Distance: $distance miles
+- Delivery Distance: $distance Kilos
 - Number of Different Items: $itemCount
 - Total Items Ordered: $totalQuantity
 
@@ -46,7 +46,7 @@ Message:";
                 
                 // Fallback if message is empty
                 if (empty($message)) {
-                    $message = "طلبك جاهز للتوصيل! الوقت المتوقع: $eta دقيقة.";
+                    $message = "Your order is ready ! the expected time is : $eta Minutes";
                 }
                 
                 return response()->json([
@@ -59,7 +59,7 @@ Message:";
             }
         } catch (\Exception $error) {
             // Fallback message if Ollama fails
-            $fallbackMessage = "طلبك قيد التحضير! الوقت المتوقع: $eta دقيقة.";
+            $fallbackMessage = "We are preparing your order ! the expected time is : $eta Minutes";
             
             return response()->json([
                 'message' => $fallbackMessage,

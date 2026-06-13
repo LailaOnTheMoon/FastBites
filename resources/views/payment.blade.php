@@ -479,16 +479,16 @@
         setTimeout(() => {
             if (selected.value === "cash") {
                 showSuccess("Thank you! Your order has been placed successfully. We'll collect payment upon delivery.");
-                setTimeout(() => {
-                    window.location.href = "/order-confirmation";
-                }, 2000);
+                // setTimeout(() => {
+                //     window.location.href = "/order-confirmation";
+                // }, 2000);
             } else if (selected.value === "card") {
                 window.location.href = "/carddetailes";
             } else if (selected.value === "wallet") {
                 showSuccess("Redirecting to wallet payment...");
-                setTimeout(() => {
-                    window.location.href = "/wallet-payment";
-                }, 2000);
+                // setTimeout(() => {
+                //     window.location.href = "/wallet-payment";
+                // }, 2000);
             }
         }, 500);
     }
