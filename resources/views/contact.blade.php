@@ -109,10 +109,10 @@
                 <h2 class="text-3xl font-bold">Need help now?</h2>
                 <p class="mt-4 text-orange-100">Open a call or message option for your favorite restaurant and get fast support for your order.</p>
                 <div class="mt-10 grid gap-4">
-                    <a href="tel:+1234567890" class="inline-flex items-center justify-center rounded-full bg-white/15 px-6 py-4 text-white font-semibold shadow-lg hover:bg-white/25 transition">
+                    <a href="tel:+1900900" class="inline-flex items-center justify-center rounded-full bg-white/15 px-6 py-4 text-white font-semibold shadow-lg hover:bg-white/25 transition">
                         📞 Call a restaurant
                     </a>
-                    <a href="sms:+1234567890" class="inline-flex items-center justify-center rounded-full bg-white/15 px-6 py-4 text-white font-semibold shadow-lg hover:bg-white/25 transition">
+                    <a href="sms:+1900900" class="inline-flex items-center justify-center rounded-full bg-white/15 px-6 py-4 text-white font-semibold shadow-lg hover:bg-white/25 transition">
                         💬 Send a message
                     </a>
                     <a href="mailto:support@fastbites.example" class="inline-flex items-center justify-center rounded-full bg-white/15 px-6 py-4 text-white font-semibold shadow-lg hover:bg-white/25 transition">

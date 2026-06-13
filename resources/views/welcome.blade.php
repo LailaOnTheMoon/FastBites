@@ -530,6 +530,48 @@
                 grid-template-columns: 1fr;
             }
         }
+        .menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #FF8C00;
+}
+
+@media (max-width: 770px) {
+
+    .menu-btn {
+        display: block;
+    }
+
+    #mobileMenu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    #mobileMenu {
+    position: fixed;
+    top: 0;
+    right: -250px; /* مخفية خارج الشاشة */
+    width: 250px;
+    height: 100vh;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.15);
+    z-index: 9999;
+}
+
+#mobileMenu.show {
+    right: 0;
+}
+}
     </style>
 </head>
 <body>
@@ -539,10 +581,11 @@
     <div class="navbar-container">
         <div class="logo-section">
             <img src="{{ asset('images/logo.png') }}" alt="Fast Bites Logo" class="logo-img">
+            <button class="menu-btn" onclick="toggleMenu()">☰</button>
             <span class="logo-text">Fast Bites</span>
         </div>
 
-        <nav class="hidden md:flex">
+        <nav id="mobileMenu">
     <a href="/" class="active">Home</a>
     <a href="/restaurants">Browse</a>
     
@@ -557,8 +600,9 @@
     <a href="/contact">Contact</a>
 </nav>
 
-        <button class="cta-btn" onclick="window.location.href='{{ route('login') }}'">Order Now</button>
-    </div>
+<div class="hero-buttons">
+            <button class="btn-primary" onclick="window.location.href='{{ route('login') }}'">Order Now</button>
+        </div>    </div>
 </header>
 
 <!-- ================= HERO SECTION ================= -->
@@ -730,7 +774,7 @@
         <div class="footer-section">
             <h3>Contact</h3>
             <p>Email: info@fastbites.com</p>
-            <p>Phone: +1 (555) 123-4567</p>
+            <p>Phone:  1900900</p>
             <p>Available 24/7</p>
         </div>
     </div>
@@ -739,6 +783,10 @@
         <p>&copy; 2026 Fast Bites. All rights reserved. | Crafted for food lovers.</p>
     </div>
 </footer>
-
+<script>
+function toggleMenu() {
+    document.getElementById("mobileMenu").classList.toggle("show");
+}
+</script>
 </body>
 </html>
