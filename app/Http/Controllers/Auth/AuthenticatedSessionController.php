@@ -36,6 +36,10 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('dashboard');
         }
 
+        if ($user instanceof User && $user->account_type === 'driver') {
+            return redirect()->route('driver.dashboard');
+        }
+
         if ($user instanceof User && $user->account_type === User::ROLE_SUPER_ADMIN) {
             return redirect()->route('super-admin.dashboard');
         }

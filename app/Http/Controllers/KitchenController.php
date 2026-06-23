@@ -70,7 +70,7 @@ class KitchenController extends Controller
             ->whereIn('orders.fulfillment_status', ['pending', 'preparing'])
             ->where(function ($query) {
                 $query->whereNotNull('orders.special_instructions')
-                      ->where('orders.special_instructions', '!=', '');
+                    ->where('orders.special_instructions', '!=', '');
             })
             ->count();
 
@@ -87,6 +87,8 @@ class KitchenController extends Controller
             ->selectRaw('AVG(TIMESTAMPDIFF(MINUTE, orders.accepted_at, NOW())) as avg_minutes')
             ->value('avg_minutes');
 
+        $kitchenAiCoordination = $this->buildKitchenAiCoordination();
+
         return view('kitchen.dashboard', [
             'newOrdersCount' => $newOrdersCount,
             'preparingCount' => $preparingCount,
@@ -96,6 +98,7 @@ class KitchenController extends Controller
             'restaurantsRunning' => $restaurantsRunning,
             'specialInstructionAlerts' => $specialInstructionAlerts,
             'averagePrepDuration' => $averagePrepDuration ? round($averagePrepDuration) : 0,
+            'kitchenAiCoordination' => $kitchenAiCoordination,
         ]);
     }
 
@@ -105,6 +108,8 @@ class KitchenController extends Controller
             ->where('orders.fulfillment_status', 'pending')
             ->orderByDesc('orders.placed_at')
             ->get();
+
+        $orders = $this->attachKitchenAiAdvice($orders);
 
         return view('kitchen.new-orders', compact('orders'));
     }
@@ -116,6 +121,8 @@ class KitchenController extends Controller
             ->orderByDesc('orders.accepted_at')
             ->get();
 
+        $orders = $this->attachKitchenAiAdvice($orders);
+
         return view('kitchen.preparing-orders', compact('orders'));
     }
 
@@ -125,6 +132,8 @@ class KitchenController extends Controller
             ->where('orders.fulfillment_status', 'ready')
             ->orderByDesc('orders.prepared_at')
             ->get();
+
+        $orders = $this->attachKitchenAiAdvice($orders);
 
         return view('kitchen.ready-orders', compact('orders'));
     }
@@ -136,6 +145,154 @@ class KitchenController extends Controller
             ->orderByDesc('orders.updated_at')
             ->get();
 
+        $orders = $this->attachKitchenAiAdvice($orders);
+
         return view('kitchen.completed-orders', compact('orders'));
+    }
+
+    private function buildKitchenAiCoordination(): array
+    {
+        $baseQuery = $this->kitchenOrdersBaseQuery();
+
+        $pendingOrders = (clone $baseQuery)
+            ->where('orders.fulfillment_status', 'pending')
+            ->count();
+
+        $preparingOrders = (clone $baseQuery)
+            ->where('orders.fulfillment_status', 'preparing')
+            ->count();
+
+        $readyOrders = (clone $baseQuery)
+            ->where('orders.fulfillment_status', 'ready')
+            ->count();
+
+        $oldestPendingOrder = (clone $baseQuery)
+            ->where('orders.fulfillment_status', 'pending')
+            ->whereNotNull('orders.placed_at')
+            ->orderBy('orders.placed_at')
+            ->first();
+
+        $averagePreparationTime = (clone $baseQuery)
+            ->whereNotNull('restaurants.preparation_time_minutes')
+            ->avg('restaurants.preparation_time_minutes');
+
+        $averagePreparationTime = $averagePreparationTime
+            ? round($averagePreparationTime)
+            : 20;
+
+        $recommendedAction = 'Kitchen is stable. Continue monitoring incoming orders.';
+        $priorityLevel = 'Low';
+        $reason = 'There are no urgent kitchen coordination issues right now.';
+
+        if ($oldestPendingOrder) {
+            $waitingMinutes = now()->diffInMinutes($oldestPendingOrder->placed_at);
+
+            if ($waitingMinutes >= 10) {
+    $waitingText = $waitingMinutes >= 60
+        ? 'more than 1 hour'
+        : round($waitingMinutes) . ' minutes';
+
+    $recommendedAction = 'Start preparing the oldest pending order immediately.';
+    $priorityLevel = 'High';
+    $reason = "Order {$oldestPendingOrder->order_number} has been pending for {$waitingText}.";
+} elseif ($pendingOrders > 0) {
+                $recommendedAction = 'Accept new pending orders and start preparation soon.';
+                $priorityLevel = 'Medium';
+                $reason = "There are {$pendingOrders} pending orders waiting for kitchen confirmation.";
+            }
+        }
+
+        if ($preparingOrders >= 3) {
+            $recommendedAction = 'Focus on completing preparing orders before accepting more.';
+            $priorityLevel = 'High';
+            $reason = "There are {$preparingOrders} orders currently being prepared.";
+        }
+
+        if ($readyOrders >= 3) {
+            $recommendedAction = 'Coordinate with drivers to pick up ready orders quickly.';
+            $priorityLevel = 'Medium';
+            $reason = "There are {$readyOrders} ready orders waiting for pickup.";
+        }
+
+        return [
+            'recommended_action' => $recommendedAction,
+            'priority_level' => $priorityLevel,
+            'reason' => $reason,
+            'pending_orders' => $pendingOrders,
+            'preparing_orders' => $preparingOrders,
+            'ready_orders' => $readyOrders,
+            'average_preparation_time' => $averagePreparationTime,
+        ];
+    }
+
+    private function attachKitchenAiAdvice($orders)
+    {
+        return $orders->map(function ($order) {
+            $order->kitchen_ai_advice = $this->buildKitchenAiAdviceForOrder($order);
+
+            return $order;
+        });
+    }
+
+    private function buildKitchenAiAdviceForOrder($order): array
+    {
+        $status = $order->fulfillment_status ?? 'unknown';
+        $preparationTime = (int) ($order->preparation_time_minutes ?? 20);
+
+        $waitingMinutes = null;
+
+        if (! empty($order->placed_at)) {
+            $waitingMinutes = now()->diffInMinutes($order->placed_at);
+        }
+
+        if ($status === 'pending') {
+    if ($waitingMinutes !== null && $waitingMinutes >= 10) {
+        $waitingText = $waitingMinutes >= 60
+            ? 'more than 1 hour'
+            : round($waitingMinutes) . ' minutes';
+
+        return [
+            'label' => 'Start Now',
+            'message' => "This order has been pending for {$waitingText}. Start preparing immediately.",
+            'priority' => 'High',
+        ];
+    }
+
+    return [
+        'label' => 'Accept Soon',
+        'message' => "Estimated preparation time is {$preparationTime} minutes. Accept and start soon.",
+        'priority' => 'Medium',
+    ];
+}
+
+        if ($status === 'preparing') {
+            return [
+                'label' => 'Keep Preparing',
+                'message' => "Continue preparing. Expected preparation duration is about {$preparationTime} minutes.",
+                'priority' => 'Medium',
+            ];
+        }
+
+        if ($status === 'ready') {
+            return [
+                'label' => 'Driver Pickup',
+                'message' => 'Food is ready. Coordinate pickup with the assigned driver.',
+                'priority' => 'Medium',
+            ];
+        }
+
+        if (in_array($status, ['completed', 'delivered'], true)) {
+            return [
+                'label' => 'Completed',
+                'message' => 'Order is completed. No kitchen action is required.',
+                'priority' => 'Low',
+            ];
+        }
+
+        return [
+            'label' => 'Monitor',
+            'message' => 'Monitor this order and update its kitchen status when needed.',
+            'priority' => 'Low',
+        ];
     }
 }
