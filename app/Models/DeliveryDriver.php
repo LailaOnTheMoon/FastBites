@@ -29,6 +29,7 @@ class DeliveryDriver extends Model
         'terminated_at',
         'current_latitude',
         'current_longitude',
+        'current_location_accuracy',
         'emergency_contact_name',
         'emergency_contact_phone',
         'notes',

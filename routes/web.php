@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\DriverDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,6 +52,7 @@ Route::post('/generate-ai-message', [AIController::class, 'generateMessage']);Ro
 Route::get('/updateUserTest', [TestController::class, 'updateUser'])->name('updateUserTest');
 Route::get('/createUserTest', [TestController::class, 'createUser'])->name('createUserTest');
 
+// ================== CUSTOMER DASHBOARD ==================
 Route::middleware(['auth:web,customer'])->group(function () {
     Route::get('/dashboard', CustomerDashboardController::class)->name('dashboard');
 
@@ -60,21 +62,43 @@ Route::middleware(['auth:web,customer'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// ================== DRIVER DASHBOARD ==================
+Route::middleware(['auth:web'])
+    ->prefix('driver')
+    ->name('driver.')
+    ->group(function () {
+        Route::get('/dashboard', [DriverDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::post('/location/update', [DriverDashboardController::class, 'updateLocation'])
+            ->name('location.update');
+
+            Route::post('/status/update', [DriverDashboardController::class, 'updateStatus'])
+    ->name('status.update');
+
+        Route::post('/orders/{order}/dispatched', [DriverDashboardController::class, 'markDispatched'])
+            ->name('orders.dispatched');
+
+        Route::post('/orders/{order}/delivered', [DriverDashboardController::class, 'markDelivered'])
+            ->name('orders.delivered');
+    });
+
+// ================== STAFF DASHBOARDS ==================
 Route::middleware(['auth:web'])->group(function () {
 
     // ================== Kitchen ==================
     Route::prefix('kitchen')
-    ->name('kitchen.')
-    ->middleware('role:kitchen_manager')
-    ->controller(KitchenController::class)
-    ->group(function () {
-        Route::get('/', 'dashboard')->name('dashboard');
-        Route::get('/new-orders', 'newOrders')->name('new-orders');
-        Route::get('/preparing-orders', 'preparingOrders')->name('preparing-orders');
-        Route::get('/ready-orders', 'readyOrders')->name('ready-orders');
-        Route::get('/completed-orders', 'completedOrders')->name('completed-orders');
-    });
-    
+        ->name('kitchen.')
+        ->middleware('role:kitchen_manager')
+        ->controller(KitchenController::class)
+        ->group(function () {
+            Route::get('/', 'dashboard')->name('dashboard');
+            Route::get('/new-orders', 'newOrders')->name('new-orders');
+            Route::get('/preparing-orders', 'preparingOrders')->name('preparing-orders');
+            Route::get('/ready-orders', 'readyOrders')->name('ready-orders');
+            Route::get('/completed-orders', 'completedOrders')->name('completed-orders');
+        });
+
     // ================== Orders ==================
     Route::prefix('orders')
         ->name('orders.')
@@ -93,46 +117,42 @@ Route::middleware(['auth:web'])->group(function () {
 
     // ================== ADMIN ==================
     Route::prefix('admin')
-    ->name('admin.')
-    ->middleware('role:admin')
-    ->group(function () {
+        ->name('admin.')
+        ->middleware('role:admin')
+        ->group(function () {
+            Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('/manage-restaurants', [AdminController::class, 'manageRestaurants'])
+                ->name('manage-restaurants');
 
-        Route::get('/manage-restaurants', [AdminController::class, 'manageRestaurants'])->name('manage-restaurants');
+            Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
 
-        Route::get('/orders', function () {
-            return view('admin.orders');
-        })->name('orders');
+            Route::get('/settings', function () {
+                return view('admin.settings');
+            })->name('settings');
 
-        Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
+            Route::get('/manage-employees', [EmployeeController::class, 'index'])->name('employees');
+            Route::get('/create-employee', [EmployeeController::class, 'create'])->name('employees.create');
+            Route::post('/store-employee', [EmployeeController::class, 'store'])->name('employees.store');
+            Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('employees.edit');
+            Route::post('/update-employee/{id}', [EmployeeController::class, 'update'])->name('employees.update');
+            Route::delete('/delete-employee/{id}', [EmployeeController::class, 'destroy'])->name('employees.delete');
 
-        Route::get('/settings', function () {
-            return view('admin.settings');
-        })->name('settings');
-
-        Route::get('/manage-employees', [EmployeeController::class, 'index'])->name('employees');
-        Route::get('/create-employee', [EmployeeController::class, 'create'])->name('employees.create');
-        Route::post('/store-employee', [EmployeeController::class, 'store'])->name('employees.store');
-        Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('employees.edit');
-        Route::post('/update-employee/{id}', [EmployeeController::class, 'update'])->name('employees.update');
-        Route::delete('/delete-employee/{id}', [EmployeeController::class, 'destroy'])->name('employees.delete');
-        Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
+            Route::get('/orders', [AdminController::class, 'orders'])->name('orders');
         });
-
 
     // ================== SUPER ADMIN ==================
     Route::prefix('super-admin')
-    ->name('super-admin.')
-    ->middleware('role:super_admin')
-    ->group(function () {
-        Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('/manage-admins', [SuperAdminController::class, 'manageAdmins'])->name('manage-admins');
-        Route::get('/manage-restaurants', [SuperAdminController::class, 'manageRestaurants'])->name('manage-restaurants');
-        Route::get('/user-management', [SuperAdminController::class, 'userManagement'])->name('user-management');
-        Route::get('/system-reports', [SuperAdminController::class, 'systemReports'])->name('system-reports');
-        Route::view('/settings', 'super-admin.settings')->name('settings');
-    });
+        ->name('super-admin.')
+        ->middleware('role:super_admin')
+        ->group(function () {
+            Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('/manage-admins', [SuperAdminController::class, 'manageAdmins'])->name('manage-admins');
+            Route::get('/manage-restaurants', [SuperAdminController::class, 'manageRestaurants'])->name('manage-restaurants');
+            Route::get('/user-management', [SuperAdminController::class, 'userManagement'])->name('user-management');
+            Route::get('/system-reports', [SuperAdminController::class, 'systemReports'])->name('system-reports');
+            Route::view('/settings', 'super-admin.settings')->name('settings');
+        });
 
     // ================== USER MANAGEMENT ==================
     Route::prefix('user-management')
