@@ -15,7 +15,6 @@ class AIController extends Controller
         $itemCount = $request->input('itemCount', 1);
         $totalQuantity = $request->input('totalQuantity', 1);
 
-        // Build a more detailed prompt for Ollama
         $prompt = "You are a friendly food delivery service AI assistant. Generate a short, enthusiastic delivery status message in Arabic (2-3 sentences max).
 
 Order Details:
@@ -29,7 +28,6 @@ Important:
 - Write ONLY in Arabic
 - Keep it friendly and encouraging
 - Keep it SHORT (max 2-3 sentences)
-- Do not include any other text or English words
 
 Message:";
 

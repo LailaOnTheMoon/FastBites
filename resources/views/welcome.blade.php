@@ -589,7 +589,6 @@
     <a href="/" class="active">Home</a>
     <a href="/restaurants">Browse</a>
     
-
     <!-- @auth
         <a href="/restaurants">Browse</a>
     @else
