@@ -751,31 +751,47 @@
     let watchId = null;
     let lastSentAt = 0;
 
+    function parseCoordinate(value) {
+        const number = parseFloat(value);
+        return Number.isNaN(number) ? null : number;
+    }
+
+    function hasValidLocation(location) {
+        return location.latitude !== null && location.longitude !== null;
+    }
+
     const driverData = {
-        latitude: @json($driver->current_latitude ? (float) $driver->current_latitude : null),
-        longitude: @json($driver->current_longitude ? (float) $driver->current_longitude : null),
+        latitude: parseCoordinate(@json($driver->current_latitude)),
+        longitude: parseCoordinate(@json($driver->current_longitude)),
     };
 
     const customerData = {
-        latitude: @json($currentOrder && $currentOrder->delivery_latitude ? (float) $currentOrder->delivery_latitude : null),
-        longitude: @json($currentOrder && $currentOrder->delivery_longitude ? (float) $currentOrder->delivery_longitude : null),
+        latitude: parseCoordinate(@json($currentOrder && $currentOrder->delivery_latitude ? (float) $currentOrder->delivery_latitude : null)),
+        longitude: parseCoordinate(@json($currentOrder && $currentOrder->delivery_longitude ? (float) $currentOrder->delivery_longitude : null)),
+        label: @json($currentOrder ? ($currentOrder->delivery_address_line_1 ?? $currentOrder->delivery_address ?? 'Customer Delivery Location') : 'Customer Delivery Location')
+    };
+
+    const restaurantData = {
+        latitude: parseCoordinate(@json($currentOrder && $currentOrder->restaurant && $currentOrder->restaurant->latitude ? (float) $currentOrder->restaurant->latitude : null)),
+        longitude: parseCoordinate(@json($currentOrder && $currentOrder->restaurant && $currentOrder->restaurant->longitude ? (float) $currentOrder->restaurant->longitude : null)),
+        label: @json($currentOrder && $currentOrder->restaurant ? ($currentOrder->restaurant->name ?? 'Restaurant Location') : 'Restaurant Location')
     };
 
     const defaultNablus = [32.2211, 35.2544];
 
-const nablusBounds = L.latLngBounds(
-    [32.1750, 35.1900],
-    [32.2850, 35.3350]
-);
+    const nablusBounds = L.latLngBounds(
+        [32.1750, 35.1900],
+        [32.2850, 35.3350]
+    );
 
-const map = L.map('driver-map', {
-    zoomControl: true,
-    scrollWheelZoom: true,
-    maxBounds: nablusBounds,
-    maxBoundsViscosity: 1.0,
-    minZoom: 12,
-    maxZoom: 19
-}).setView(defaultNablus, 14);
+    const map = L.map('driver-map', {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        maxBounds: nablusBounds,
+        maxBoundsViscosity: 1.0,
+        minZoom: 12,
+        maxZoom: 19
+    }).setView(defaultNablus, 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
@@ -784,94 +800,129 @@ const map = L.map('driver-map', {
 
     let driverMarker = null;
     let customerMarker = null;
+    let restaurantMarker = null;
     let routeLine = null;
 
     const driverIcon = L.divIcon({
-        html: '<div style="background:#111827;color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #f97316;">🏍️</div>',
+        html: '<div style="background:#111827;color:white;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #f97316;box-shadow:0 6px 16px rgba(0,0,0,.25);">🏍️</div>',
         className: '',
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
     });
 
     const customerIcon = L.divIcon({
-        html: '<div style="background:#2563eb;color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;">📍</div>',
+        html: '<div style="background:#2563eb;color:white;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 6px 16px rgba(0,0,0,.20);">📍</div>',
         className: '',
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
     });
 
-    function drawMap() {
-        const points = [];
+    const restaurantIcon = L.divIcon({
+        html: '<div style="background:#f97316;color:white;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid white;box-shadow:0 6px 16px rgba(0,0,0,.20);">🏪</div>',
+        className: '',
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+    });
 
-        if (driverData.latitude && driverData.longitude) {
-    const driverLatLng = [driverData.latitude, driverData.longitude];
-    const isDriverInsideNablus = nablusBounds.contains(driverLatLng);
-
-    if (!isDriverInsideNablus) {
+    function setGpsStatus(message, className = 'status-box') {
         const status = document.getElementById('gps_status');
-        status.textContent = 'Driver location is outside Nablus. GPS may be inaccurate.';
-        status.className = 'status-box danger';
+        if (!status) return;
+        status.textContent = message;
+        status.className = className;
     }
 
-    if (driverMarker) {
-        driverMarker.setLatLng(driverLatLng);
-    } else {
-        driverMarker = L.marker(driverLatLng, { icon: driverIcon })
-            .addTo(map)
-            .bindPopup(isDriverInsideNablus ? 'Driver Location' : 'Driver Location Outside Nablus');
-    }
-
-    points.push(driverLatLng);
-}
-
-        if (customerData.latitude && customerData.longitude) {
-            const customerLatLng = [customerData.latitude, customerData.longitude];
-
-            if (customerMarker) {
-                customerMarker.setLatLng(customerLatLng);
-            } else {
-                customerMarker = L.marker(customerLatLng, { icon: customerIcon })
-                    .addTo(map)
-                    .bindPopup('Customer Delivery Location');
-            }
-
-            points.push(customerLatLng);
+    function upsertMarker(existingMarker, coordinates, icon, popupText) {
+        if (existingMarker) {
+            existingMarker.setLatLng(coordinates);
+            return existingMarker;
         }
 
-        if (points.length >= 2) {
-            if (routeLine) {
-                routeLine.remove();
+        return L.marker(coordinates, { icon })
+            .addTo(map)
+            .bindPopup(popupText);
+    }
+
+    function drawMap() {
+        const boundsPoints = [];
+        const routePoints = [];
+
+        if (hasValidLocation(restaurantData)) {
+            const restaurantLatLng = [restaurantData.latitude, restaurantData.longitude];
+            restaurantMarker = upsertMarker(
+                restaurantMarker,
+                restaurantLatLng,
+                restaurantIcon,
+                '<strong>Restaurant Location</strong><br>' + restaurantData.label
+            );
+            boundsPoints.push(restaurantLatLng);
+        }
+
+        if (hasValidLocation(customerData)) {
+            const customerLatLng = [customerData.latitude, customerData.longitude];
+            customerMarker = upsertMarker(
+                customerMarker,
+                customerLatLng,
+                customerIcon,
+                '<strong>Customer / Order Location</strong><br>' + customerData.label
+            );
+            boundsPoints.push(customerLatLng);
+            routePoints.push(customerLatLng);
+        }
+
+        if (hasValidLocation(driverData)) {
+            const driverLatLng = [driverData.latitude, driverData.longitude];
+            const isDriverInsideNablus = nablusBounds.contains(driverLatLng);
+
+            if (!isDriverInsideNablus) {
+                setGpsStatus('Driver location is outside Nablus. GPS may be inaccurate.', 'status-box danger');
             }
 
-            routeLine = L.polyline(points, {
+            driverMarker = upsertMarker(
+                driverMarker,
+                driverLatLng,
+                driverIcon,
+                isDriverInsideNablus ? '<strong>Driver Location</strong>' : '<strong>Driver Location Outside Nablus</strong>'
+            );
+
+            boundsPoints.push(driverLatLng);
+            routePoints.unshift(driverLatLng);
+        }
+
+        if (routeLine) {
+            routeLine.remove();
+            routeLine = null;
+        }
+
+        if (routePoints.length >= 2) {
+            routeLine = L.polyline(routePoints, {
                 color: '#f97316',
-                weight: 4,
+                weight: 5,
                 opacity: 0.9
             }).addTo(map);
+        }
 
-            map.fitBounds(L.latLngBounds(points), {
+        if (boundsPoints.length >= 2) {
+            map.fitBounds(L.latLngBounds(boundsPoints), {
                 padding: [50, 50],
                 maxZoom: 15
             });
-        } else if (points.length === 1) {
-            map.setView(points[0], 15);
+        } else if (boundsPoints.length === 1) {
+            map.setView(boundsPoints[0], 15);
+        } else {
+            map.setView(defaultNablus, 14);
+            setGpsStatus('No map coordinates are available for this order yet.', 'status-box warning');
         }
     }
 
     drawMap();
 
     function startTracking() {
-        const status = document.getElementById('gps_status');
-
         if (!navigator.geolocation) {
-            status.textContent = 'GPS is not supported by this browser.';
-            status.className = 'status-box danger';
+            setGpsStatus('GPS is not supported by this browser.', 'status-box danger');
             return;
         }
 
-        status.textContent = 'Requesting GPS permission...';
-        status.className = 'status-box';
-
+        setGpsStatus('Requesting GPS permission...', 'status-box');
         updateDriverStatus('available');
 
         watchId = navigator.geolocation.watchPosition(
@@ -879,17 +930,25 @@ const map = L.map('driver-map', {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
                 const accuracy = position.coords.accuracy;
+                const browserLatLng = [latitude, longitude];
+                const isInsideNablus = nablusBounds.contains(browserLatLng);
+                const isReliable = isInsideNablus && accuracy <= 1000;
 
                 document.getElementById('lat').textContent = latitude.toFixed(7);
                 document.getElementById('lng').textContent = longitude.toFixed(7);
                 document.getElementById('accuracy').textContent = Math.round(accuracy) + ' meters';
                 document.getElementById('last_update').textContent = new Date().toLocaleTimeString();
 
-                updateAccuracyMessage(accuracy);
+                updateAccuracyMessage(accuracy, isInsideNablus);
+
+                if (!isReliable) {
+                    setGpsStatus('GPS reading ignored because it is outside Nablus or inaccurate. Use mobile GPS or update the driver location manually.', 'status-box danger');
+                    drawMap();
+                    return;
+                }
 
                 driverData.latitude = latitude;
                 driverData.longitude = longitude;
-
                 drawMap();
 
                 const now = Date.now();
@@ -899,15 +958,13 @@ const map = L.map('driver-map', {
                     sendLocation(latitude, longitude, accuracy);
                 }
 
-                status.textContent = 'GPS tracking is active.';
-                status.className = 'status-box good';
+                setGpsStatus('GPS tracking is active.', 'status-box good');
 
                 document.getElementById('start_button').style.display = 'none';
                 document.getElementById('stop_button').style.display = 'inline-block';
             },
             function (error) {
-                status.textContent = 'GPS error: ' + error.message;
-                status.className = 'status-box danger';
+                setGpsStatus('GPS error: ' + error.message, 'status-box danger');
             },
             {
                 enableHighAccuracy: true,
@@ -924,25 +981,29 @@ const map = L.map('driver-map', {
             updateDriverStatus('offline');
         }
 
-        document.getElementById('gps_status').textContent = 'GPS tracking stopped.';
-        document.getElementById('gps_status').className = 'status-box warning';
+        setGpsStatus('GPS tracking stopped.', 'status-box warning');
 
         document.getElementById('start_button').style.display = 'inline-block';
         document.getElementById('stop_button').style.display = 'none';
     }
 
-    function updateAccuracyMessage(accuracy) {
+    function updateAccuracyMessage(accuracy, isInsideNablus = true) {
         const accuracyMessage = document.getElementById('accuracy_message');
+        if (!accuracyMessage) return;
+
         const roundedAccuracy = Math.round(accuracy);
 
-        if (accuracy <= 100) {
+        if (!isInsideNablus) {
+            accuracyMessage.textContent = `GPS Accuracy: Low (${roundedAccuracy} meters). This location is outside Nablus and will not be saved.`;
+            accuracyMessage.className = 'status-box danger';
+        } else if (accuracy <= 100) {
             accuracyMessage.textContent = `GPS Accuracy: Good (${roundedAccuracy} meters).`;
             accuracyMessage.className = 'status-box good';
         } else if (accuracy <= 1000) {
             accuracyMessage.textContent = `GPS Accuracy: Medium (${roundedAccuracy} meters). Mobile GPS is recommended for better tracking.`;
             accuracyMessage.className = 'status-box warning';
         } else {
-            accuracyMessage.textContent = `GPS Accuracy: Low (${roundedAccuracy} meters). This location may be inaccurate. Please use a mobile device with GPS.`;
+            accuracyMessage.textContent = `GPS Accuracy: Low (${roundedAccuracy} meters). This inaccurate location will not be saved.`;
             accuracyMessage.className = 'status-box danger';
         }
     }
@@ -970,10 +1031,7 @@ const map = L.map('driver-map', {
         })
         .catch(error => {
             console.error('Location update failed:', error);
-
-            const status = document.getElementById('gps_status');
-            status.textContent = 'Location update failed. Check console.';
-            status.className = 'status-box danger';
+            setGpsStatus('Location update failed. Check console.', 'status-box danger');
         });
     }
 
@@ -991,25 +1049,25 @@ const map = L.map('driver-map', {
     });
 
     function updateDriverStatus(statusValue) {
-    fetch("{{ route('driver.status.update') }}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            status: statusValue
+        fetch("{{ route('driver.status.update') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                status: statusValue
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Driver status updated:', data);
-    })
-    .catch(error => {
-        console.error('Driver status update failed:', error);
-    });
-}
+        .then(response => response.json())
+        .then(data => {
+            console.log('Driver status updated:', data);
+        })
+        .catch(error => {
+            console.error('Driver status update failed:', error);
+        });
+    }
 </script>
 </body>
 </html>

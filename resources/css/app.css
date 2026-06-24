@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './auth.css';
+@import './kitchen.css';
+@import './orders.css';
+@import './preparation.css';
+@import './readyorders.css';
+@import './settings.css';

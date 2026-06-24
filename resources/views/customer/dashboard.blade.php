@@ -251,7 +251,7 @@
             Menu Category
         </h3>
 
-        <a href="#recommended-menu" class="inline-flex items-center gap-2 text-sm font-bold text-orange-500">
+        <a href="{{ url('/restaurants') }}" class="inline-flex items-center gap-2 text-sm font-bold text-orange-500">
             View All
             <span class="flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
                 ›
@@ -279,6 +279,12 @@
                     };
 
                     $isFirst = $index === 0;
+
+                    $categoryMenuUrl = match(strtolower($categoryName)) {
+                        'desserts', 'dessert' => url('/menu'),
+                        'drink', 'drinks', 'juice', 'juices' => url('/menu3'),
+                        default => url('/menu2'),
+                    };
                 @endphp
 
                 <article data-searchable="{{ strtolower($categoryName) }}" class="{{ $isFirst ? 'bg-orange-500 text-white' : 'bg-white text-gray-900 ring-1 ring-gray-100' }} rounded-3xl p-5 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md">
@@ -294,7 +300,7 @@
                         {{ $category['count'] ?? 0 }} items
                     </p>
 
-                    <a href="#recommended-menu" class="{{ $isFirst ? 'bg-white text-orange-500' : 'bg-orange-500 text-white' }} mx-auto mt-4 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold" title="View recommended menu">
+                    <a href="{{ $categoryMenuUrl }}" class="{{ $isFirst ? 'bg-white text-orange-500' : 'bg-orange-500 text-white' }} mx-auto mt-4 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold" title="Open category menu">
                         ›
                     </a>
                 </article>
@@ -327,11 +333,21 @@
     @if(isset($recommendedItems) && $recommendedItems->isNotEmpty())
         <div class="mt-6 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
             @foreach($recommendedItems as $item)
+                @php
+                    $category = strtolower($item->category ?? '');
+
+                    $menuUrl = match ($category) {
+                        'desserts', 'dessert' => url('/menu'),
+                        'drinks', 'drink' => url('/menu3'),
+                        default => url('/menu2'),
+                    };
+                @endphp
+
                 <article data-searchable="{{ strtolower(($item->name ?? '') . ' ' . ($item->category ?? '') . ' ' . ($item->restaurant->name ?? '')) }}" class="group overflow-hidden rounded-3xl border border-orange-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
                     <div class="relative">
                         @if($item->image_path)
                             <img
-                                src="{{ asset('storage/' . $item->image_path) }}"
+                                src="{{ asset($item->image_path) }}"
                                 alt="{{ $item->name }}"
                                 class="h-44 w-full object-cover"
                             >
@@ -378,7 +394,7 @@
                                 </span>
                             @endif
 
-                            <a href="{{ url('/restaurants') }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-lg font-bold text-white shadow-sm transition hover:bg-orange-600" title="Order this item">
+                            <a href="{{ $menuUrl }}" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-lg font-bold text-white shadow-sm transition hover:bg-orange-600" title="Open item menu">
                                 +
                             </a>
                         </div>
@@ -421,19 +437,51 @@
     </div>
 
     @php
+        /*
+            AI Food Insights should only display menu items and restaurants
+            that currently exist in the real FastBites menu.
+            This prevents old database orders such as "Margherita Pizza"
+            from appearing after the menu was updated.
+        */
+        $availableRecommendedItems = collect($recommendedItems ?? [])->filter();
+
+        $availableItemNames = $availableRecommendedItems
+            ->pluck('name')
+            ->filter()
+            ->values();
+
+        $availableRestaurantNames = $availableRecommendedItems
+            ->map(fn ($item) => $item->restaurant->name ?? null)
+            ->filter()
+            ->unique()
+            ->values();
+
         $favoriteCategory = $aiInsights['favorite_category'] ?? 'Not enough data yet';
         $preferredRestaurant = $aiInsights['preferred_restaurant'] ?? 'Not enough data yet';
         $lastOrderedItem = $aiInsights['last_ordered_item'] ?? 'No previous item found';
         $insightReason = $aiInsights['reason'] ?? 'Place more orders so FastBites can learn your preferences.';
 
+        $fallbackItem = $availableRecommendedItems
+            ->first(fn ($item) => strtolower($item->category ?? '') === strtolower($favoriteCategory));
+
+        $fallbackItem = $fallbackItem ?: $availableRecommendedItems->first();
+
+        if ($availableItemNames->isNotEmpty() && ! $availableItemNames->contains($lastOrderedItem)) {
+            $lastOrderedItem = $fallbackItem->name ?? $availableItemNames->first();
+        }
+
+        if ($availableRestaurantNames->isNotEmpty() && ! $availableRestaurantNames->contains($preferredRestaurant)) {
+            $preferredRestaurant = $fallbackItem->restaurant->name ?? $availableRestaurantNames->first();
+        }
+
         $favoriteCategoryIcon = match(strtolower($favoriteCategory)) {
             'pizza' => '🍕',
             'burger', 'burgers' => '🍔',
-            'pasta' => '🍝',
+            'chicken' => '🍗',
+            'shawarma' => '🌯',
             'drinks', 'drink', 'juice', 'juices' => '🥤',
             'salad', 'salads' => '🥗',
             'dessert', 'desserts' => '🍰',
-            'snack', 'snacks' => '🍟',
             default => '🍽️',
         };
 
@@ -457,7 +505,7 @@
             [
                 'label' => 'Last Ordered Item',
                 'value' => $lastOrderedItem,
-                'description' => 'The latest item in your order history.',
+                'description' => 'The latest available item related to your order history.',
                 'icon' => '🍽️',
                 'bg' => 'from-yellow-50 to-white',
                 'icon_bg' => 'bg-yellow-100',
